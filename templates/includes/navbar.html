@@ -23,7 +23,12 @@
 
             <!-- Заглушка: вход/корзина -->
             <div class="d-flex align-items-center gap-3">
-                <a href="#" class="text-decoration-none text-muted">Войти (заглушка)</a>
+                {% if user.is_authenticated and user.role == 'customer' %}
+                    <span class="text-muted">{{ user.username }}</span>
+                    <a href="{% url 'accounts:customer_logout' %}" class="text-decoration-none">Выйти</a>
+                {% else %}
+                    <a href="{% url 'accounts:customer_login' %}" class="text-decoration-none">Войти</a>
+                {% endif %}
                 <a href="#" class="text-decoration-none text-muted">Корзина (заглушка)</a>
             </div>
         </div>

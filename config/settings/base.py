@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'locations',
     'pages',
-    'shops'
+    'shops',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
+
+AUTH_USER_MODEL = 'accounts.User'
 
 FIXTURE_DIRS = [BASE_DIR / 'fixtures']
 
