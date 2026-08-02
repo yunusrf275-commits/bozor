@@ -1,0 +1,288 @@
+
+
+
+[
+  {
+    "name": "Qoraqalpog'iston Respublikasi",
+    "level": 1,
+    "children": [
+      "Nukus shahri",
+      "Amudaryo tumani",
+      "Beruniy tumani",
+      "Chimboy tumani",
+      "Ellikqal'a tumani",
+      "Kegeyli tumani",
+      "Mo'ynoq tumani",
+      "Nukus tumani",
+      "Qanlikoʻl tumani",
+      "Qoraoʻzak tumani",
+      "Qoʻngʻirot tumani",
+      "Shumanay tumani",
+      "Taxtakoʻpir tumani",
+      "Toʻrtkoʻl tumani",
+      "Xoʻjayli tumani",
+      "Boʻzatov tumani"
+    ]
+  },
+  {
+    "name": "Andijon viloyati",
+    "level": 1,
+    "children": [
+      "Andijon shahri",
+      "Xonobod shahri",
+      "Andijon tumani",
+      "Asaka tumani",
+      "Baliqchi tumani",
+      "Bo'ston tumani",
+      "Buloqboshi tumani",
+      "Izboskan tumani",
+      "Jalaquduq tumani",
+      "Xo'jaobod tumani",
+      "Qo'rg'ontepa tumani",
+      "Marhamat tumani",
+      "Oltinko'l tumani",
+      "Paxtaobod tumani",
+      "Shahrixon tumani",
+      "Ulug'nor tumani"
+    ]
+  },
+  {
+    "name": "Buxoro viloyati",
+    "level": 1,
+    "children": [
+      "Buxoro shahri",
+      "Kogon shahri",
+      "Buxoro tumani",
+      "G'ijduvon tumani",
+      "Jondor tumani",
+      "Kogon tumani",
+      "Olot tumani",
+      "Peshku tumani",
+      "Qorako'l tumani",
+      "Qorovulbozor tumani",
+      "Romitan tumani",
+      "Shofirkon tumani",
+      "Vobkent tumani",
+      "Alat tumani"
+    ]
+  },
+  {
+    "name": "Farg'ona viloyati",
+    "level": 1,
+    "children": [
+      "Farg'ona shahri",
+      "Qo'qon shahri",
+      "Marg'ilon shahri",
+      "Qo'shtepa tumani",
+      "Beshariq tumani",
+      "Bog'dod tumani",
+      "Buvayda tumani",
+      "Dang'ara tumani",
+      "Furqat tumani",
+      "Oltiariq tumani",
+      "Quva tumani",
+      "Rishton tumani",
+      "So'x tumani",
+      "Toshloq tumani",
+      "Uchko'prik tumani",
+      "Uzbekiston tumani",
+      "Yozyovon tumani",
+      "Farg'ona tumani"
+    ]
+  },
+  {
+    "name": "Jizzax viloyati",
+    "level": 1,
+    "children": [
+      "Jizzax shahri",
+      "Arnasoy tumani",
+      "Baxmal tumani",
+      "Do'stlik tumani",
+      "Forish tumani",
+      "G'allaorol tumani",
+      "Zafarobod tumani",
+      "Zarbdor tumani",
+      "Zomin tumani",
+      "Mirzachoʻl tumani",
+      "Paxtakor tumani",
+      "Yangiobod tumani",
+      "Sharof Rashidov tumani"
+    ]
+  },
+  {
+    "name": "Xorazm viloyati",
+    "level": 1,
+    "children": [
+      "Urganch shahri",
+      "Xiva shahri",
+      "Bog'ot tumani",
+      "Gurlan tumani",
+      "Qo'shko'pir tumani",
+      "Shovot tumani",
+      "Urganch tumani",
+      "Xazorasp tumani",
+      "Xiva tumani",
+      "Yangiariq tumani",
+      "Yangibozor tumani",
+      "Tuproqqal'a tumani"
+    ]
+  },
+  {
+    "name": "Namangan viloyati",
+    "level": 1,
+    "children": [
+      "Namangan shahri",
+      "Chortoq tumani",
+      "Chust tumani",
+      "Kosonsoy tumani",
+      "Mingbuloq tumani",
+      "Namangan tumani",
+      "Norin tumani",
+      "Pop tumani",
+      "To'raqo'rg'on tumani",
+      "Uchqo'rg'on tumani",
+      "Uychi tumani",
+      "Yangiqo'rg'on tumani"
+    ]
+  },
+  {
+    "name": "Navoiy viloyati",
+    "level": 1,
+    "children": [
+      "Navoiy shahri",
+      "Zarafshon shahri",
+      "Karmana tumani",
+      "Konimex tumani",
+      "Navbahor tumani",
+      "Nurota tumani",
+      "Qiziltepa tumani",
+      "Tomdi tumani",
+      "Uchquduq tumani",
+      "Xatirchi tumani"
+    ]
+  },
+  {
+    "name": "Qashqadaryo viloyati",
+    "level": 1,
+    "children": [
+      "Qarshi shahri",
+      "Shahrisabz shahri",
+      "Chiroqchi tumani",
+      "Dehqonobod tumani",
+      "G'uzor tumani",
+      "Kasbi tumani",
+      "Kitob tumani",
+      "Koson tumani",
+      "Mirishkor tumani",
+      "Muborak tumani",
+      "Nishon tumani",
+      "Qamashi tumani",
+      "Qarshi tumani",
+      "Yakkabog' tumani",
+      "Shahrisabz tumani",
+      "Ko'kdala tumani"
+    ]
+  },
+  {
+    "name": "Samarqand viloyati",
+    "level": 1,
+    "children": [
+      "Samarqand shahri",
+      "Kattaqo'rg'on shahri",
+      "Bulung'ur tumani",
+      "Ishtixon tumani",
+      "Jomboy tumani",
+      "Kattaqo'rg'on tumani",
+      "Qo'shrabot tumani",
+      "Narpay tumani",
+      "Nurobod tumani",
+      "Oqdaryo tumani",
+      "Pastdarg'om tumani",
+      "Payariq tumani",
+      "Paxtachi tumani",
+      "Samarqand tumani",
+      "Toyloq tumani",
+      "Urgut tumani"
+    ]
+  },
+  {
+    "name": "Sirdaryo viloyati",
+    "level": 1,
+    "children": [
+      "Guliston shahri",
+      "Yangiyer shahri",
+      "Shirin shahri",
+      "Boyovut tumani",
+      "Guliston tumani",
+      "Mirzaobod tumani",
+      "Oqoltin tumani",
+      "Sardoba tumani",
+      "Sayxunobod tumani",
+      "Sirdaryo tumani",
+      "Xovos tumani"
+    ]
+  },
+  {
+    "name": "Surxondaryo viloyati",
+    "level": 1,
+    "children": [
+      "Termiz shahri",
+      "Angor tumani",
+      "Bandixon tumani",
+      "Boysun tumani",
+      "Denov tumani",
+      "Jarqo'rg'on tumani",
+      "Qiziriq tumani",
+      "Muzrabot tumani",
+      "Oltinsoy tumani",
+      "Sariosiyo tumani",
+      "Sherobod tumani",
+      "Shoʻrchi tumani",
+      "Termiz tumani",
+      "Uzun tumani"
+    ]
+  },
+  {
+    "name": "Toshkent viloyati",
+    "level": 1,
+    "children": [
+      "Nurafshon shahri",
+      "Angren shahri",
+      "Bekobod shahri",
+      "Chirchiq shahri",
+      "Ohangaron shahri",
+      "Yangiyo'l shahri",
+      "Bekobod tumani",
+      "Bo'ka tumani",
+      "Chinoz tumani",
+      "Qibray tumani",
+      "Ohangaron tumani",
+      "Oqqo'rg'on tumani",
+      "Parkent tumani",
+      "Piskent tumani",
+      "Quyichirchiq tumani",
+      "O'rtachirchiq tumani",
+      "Yuqorichirchiq tumani",
+      "Yangiyo'l tumani",
+      "Zangiota tumani"
+    ]
+  },
+  {
+    "name": "Toshkent shahri",
+    "level": 1,
+    "children": [
+      "Bektemir tumani",
+      "Chilonzor tumani",
+      "Yakkasaroy tumani",
+      "Mirobod tumani",
+      "Mirzo Ulug'bek tumani",
+      "Sergeli tumani",
+      "Shayxontohur tumani",
+      "Olmazor tumani",
+      "Uchtepa tumani",
+      "Yashnobod tumani",
+      "Yunusobod tumani",
+      "Yangihayot tumani"
+    ]
+  }
+]

@@ -1,0 +1,59 @@
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'pages:home' %}">Bozor</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Заглушка: выбор региона -->
+           <div class="mx-lg-3 my-2 my-lg-0">
+              <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#locationModal">
+        📍      <span id="selectedLocationLabel">Весь Узбекистан</span>
+             </button>
+        </div>
+
+            <!-- Заглушка: поиск -->
+            <form class="d-flex flex-grow-1 mx-lg-3 my-2 my-lg-0">
+                <input class="form-control" type="search" placeholder="Поиск магазинов и товаров (заглушка)" disabled>
+            </form>
+
+            <!-- Заглушка: вход/корзина -->
+            <div class="d-flex align-items-center gap-3">
+                <a href="#" class="text-decoration-none text-muted">Войти (заглушка)</a>
+                <a href="#" class="text-decoration-none text-muted">Корзина (заглушка)</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="modal fade" id="locationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Выберите регион</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="locationModalBody">
+                <input type="text" class="form-control mb-3" id="locationSearchInput" placeholder="Поиск...">
+
+                <button type="button" class="list-group-item list-group-item-action mb-2" id="allUzbekistanBtn">
+                    Весь Узбекистан
+                </button>
+                <div class="list-group" id="regionsList">
+                    <!-- сюда сервер сразу отрисует 14 областей -->
+                    <div class="list-group" id="regionsList">
+                       {% for region in navbar_regions %}
+                            <button type="button" class="list-group-item list-group-item-action region-btn" data-id="{{ region.id }}" data-name="{{ region.name }}">
+                               {{ region.name }}
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

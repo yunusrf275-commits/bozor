@@ -1,0 +1,15 @@
+
+
+{% for shop in shops %}
+    <div class="col">
+        <div class="card h-100">
+            {% if shop.logo %}
+                <img src="{{ shop.logo.url }}" class="card-img-top" alt="{{ shop.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ shop.name }}</h5>
+                <p class="card-text text-muted small">{{ shop.location.name }}</p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
