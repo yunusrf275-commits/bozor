@@ -1,9 +1,8 @@
 
-
 from django.db import models
 from django.utils.text import slugify
+from django.conf import settings
 from locations.models import Location
-
 
 class Shop(models.Model):
     name = models.CharField(max_length=150, verbose_name="Название магазина")
@@ -14,8 +13,17 @@ class Shop(models.Model):
         related_name='shops',
         verbose_name="Локация",
     )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name='owned_shops',
+        verbose_name="Владелец",
+        null=True,
+        blank=True,
+    )
     logo = models.ImageField(upload_to='shops/logos/%Y/%m/', blank=True, null=True)
     is_active = models.BooleanField(default=True, verbose_name="Активен")
+    # save() и Meta без изменений — оставляем как есть
 
     class Meta:
         verbose_name = "Магазин"
