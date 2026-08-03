@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loading = true;
         const page = container.dataset.nextPage;
         const location = container.dataset.location;
+        const category = container.dataset.category || '';
 
         fetch(`/?page=${page}&location=${location}&ajax=1`, {
             
@@ -118,3 +119,69 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 });
+
+const categoriesList = document.getElementById('categoriesList');
+const categoryModalBody = document.getElementById('categoryModalBody');
+const selectedCategoryLabel = document.getElementById('selectedCategoryLabel');
+const allCategoriesBtn = document.getElementById('allCategoriesBtn');
+
+function loadCategoryLevel(categoryId, categoryName) {
+    fetch(`/categories/get-children/?parent_id=${categoryId}`)
+        .then(response => response.json())
+        .then(children => {
+            if (children.length === 0) {
+                window.location.href = `/?category=${categoryId}`;
+                return;
+            }
+            renderCategoryLevel(categoryId, categoryName, children);
+        });
+}
+
+function renderCategoryLevel(categoryId, categoryName, children) {
+    let html = `
+        <input type="text" class="form-control mb-3" id="categorySearchInput" placeholder="Поиск...">
+        <button type="button" class="btn btn-link mb-2 back-category-btn">&larr; Назад</button>
+        <button type="button" class="list-group-item list-group-item-action mb-2 select-category-btn" data-id="${categoryId}">
+            Вся категория "${categoryName}"
+        </button>
+        <div class="list-group">
+    `;
+    children.forEach(c => {
+        html += `<button type="button" class="list-group-item list-group-item-action category-btn" data-id="${c.id}" data-name="${c.name}">${c.name}</button>`;
+    });
+    html += `</div>`;
+
+    categoryModalBody.innerHTML = html;
+    attachCategoryHandlers();
+}
+
+function attachCategoryHandlers() {
+    categoryModalBody.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            loadCategoryLevel(this.dataset.id, this.dataset.name);
+        });
+    });
+
+    categoryModalBody.querySelectorAll('.select-category-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            window.location.href = `/?category=${this.dataset.id}`;
+        });
+    });
+
+    const backBtn = categoryModalBody.querySelector('.back-category-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', function () {
+            location.reload();
+        });
+    }
+}
+
+if (categoriesList) {
+    attachCategoryHandlers();
+
+    if (allCategoriesBtn) {
+        allCategoriesBtn.addEventListener('click', function () {
+            window.location.href = '/';
+        });
+    }
+}

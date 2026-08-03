@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'pages',
     'shops',
     'accounts',
+    'categories',
+    'products'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'locations.context_processors.regions',
+                'categories.context_processors.top_categories',
             ],
         },
     },

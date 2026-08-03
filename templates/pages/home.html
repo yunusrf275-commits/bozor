@@ -6,7 +6,7 @@
 {% block content %}
     <h1 class="mb-4">Магазины</h1>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="shopsContainer" data-next-page="2" data-location="{{ location_id }}">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="shopsContainer" data-next-page="2" data-location="{{ location_id }}" data-category="{{ category_id }}">
         {% include 'pages/_shop_cards.html' %}
     </div>
 

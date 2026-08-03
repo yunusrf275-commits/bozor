@@ -17,6 +17,7 @@ def get_descendant_ids(location):
 
 def home(request):
     location_id = request.GET.get('location')
+    category_id = request.GET.get('category')
     page_number = request.GET.get('page', 1)
 
     shops_qs = Shop.objects.filter(is_active=True)
@@ -28,8 +29,11 @@ def home(request):
             ids = get_descendant_ids(selected_location)
             shops_qs = shops_qs.filter(location_id__in=ids)
 
+    if category_id:
+        shops_qs = shops_qs.filter(products__category_id=category_id).distinct()
+
     # Ключ в сессии — свой для каждого фильтра, чтобы при смене региона рандом пересчитывался
-    session_key = f"shops_order_{location_id or 'all'}"
+    session_key = f"shops_order_{location_id or 'all'}_{category_id or 'all'}"
 
     if session_key not in request.session:
         # Первый заход с этим фильтром — генерируем и запоминаем порядок
