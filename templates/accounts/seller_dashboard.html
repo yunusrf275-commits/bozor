@@ -3,6 +3,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Кабинет продавца</h1>
-    <p>Добро пожаловать, {{ request.user.username }}!</p>
+    <h1 class="mb-4">Выберите магазин</h1>
+    <div class="list-group">
+        {% for shop in shops %}
+            <a href="{% url 'shops:dashboard' shop.id %}" class="list-group-item list-group-item-action">
+                {{ shop.name }} — {{ shop.location.name }}
+            </a>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from shops.models import Shop
 from .models import User
 
 
@@ -28,7 +29,13 @@ def seller_login(request):
 def seller_dashboard(request):
     if request.user.role != User.ROLE_SHOP_OWNER:
         return redirect('accounts:seller_login')
-    return render(request, 'accounts/seller_dashboard.html')
+
+    my_shops = Shop.objects.filter(owner=request.user)
+
+    if my_shops.count() == 1:
+        return redirect('shops:dashboard', shop_id=my_shops.first().id)
+
+    return render(request, 'accounts/seller_dashboard.html', {'shops': my_shops})
 
 
 
