@@ -38,6 +38,7 @@
             <div class="d-flex align-items-center gap-3">
             {% if user.is_authenticated and user.role == 'customer' %}
                 <a href="{% url 'orders:my_orders' %}" class="text-decoration-none text-muted">Мои заказы</a>
+                <a href="{% url 'favorites:my_favorites' %}" class="text-decoration-none text-muted">Избранное</a>
                 <span class="text-muted">{{ user.username }}</span>
                 <a href="{% url 'accounts:customer_logout' %}" class="text-decoration-none">Выйти</a>
             {% else %}
