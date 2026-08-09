@@ -1,0 +1,46 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {% with product.images.all as images %}
+                {% if images %}
+                    <img src="{{ images.0.image.url }}" class="img-fluid rounded mb-3" alt="{{ product.name }}">
+                    <div class="d-flex gap-2 flex-wrap">
+                        {% for img in images %}
+                            <img src="{{ img.image.url }}" width="70" height="70" style="object-fit: cover; cursor: pointer;" class="rounded border">
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">Нет фото</p>
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="col-md-6">
+            <h1>{{ product.name }}</h1>
+            <p class="text-muted">
+                <a href="{% url 'shops:detail' product.shop.slug %}" class="text-decoration-none">{{ product.shop.name }}</a>
+                — {{ product.shop.location.name }}
+            </p>
+
+            <div class="mb-3">
+                {% if product.discount_percent %}
+                    <span class="text-decoration-line-through text-muted fs-5">{{ product.price }} сум</span>
+                    <span class="fw-bold text-danger fs-3 ms-2">{{ product.final_price }} сум</span>
+                    <span class="badge bg-danger ms-2">-{{ product.discount_percent }}%</span>
+                {% else %}
+                    <span class="fw-bold fs-3">{{ product.price }} сум</span>
+                {% endif %}
+            </div>
+
+            <p>{{ product.description|linebreaks }}</p>
+
+            <p class="text-muted small">В наличии: {{ product.stock_quantity }} шт.</p>
+
+            <button class="btn btn-primary btn-lg">В корзину</button>
+        </div>
+    </div>
+{% endblock %}

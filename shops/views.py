@@ -7,6 +7,12 @@ from products.models import Product, ProductImage
 from categories.models import Category
 
 
+def shop_detail(request, slug):
+    shop = get_object_or_404(Shop, slug=slug, is_active=True)
+    products = Product.objects.filter(shop=shop, is_active=True)
+    return render(request, 'shops/detail.html', {'shop': shop, 'products': products})
+
+
 @login_required
 def shop_dashboard(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id, owner=request.user)
