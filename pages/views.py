@@ -3,6 +3,7 @@ import random
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from categories.models import Category
 from shops.models import Shop
 from locations.models import Location
 
@@ -15,9 +16,18 @@ def get_descendant_ids(location):
     return ids
 
 
+def get_category_descendant_ids(category):
+    ids = [category.id]
+    for child in category.children.all():
+        ids.append(child.id)
+        ids += list(child.children.values_list('id', flat=True))
+    return ids
+
+
 def home(request):
     location_id = request.GET.get('location')
     category_id = request.GET.get('category')
+    query = request.GET.get('q', '').strip()
     page_number = request.GET.get('page', 1)
 
     shops_qs = Shop.objects.filter(is_active=True)
@@ -30,10 +40,18 @@ def home(request):
             shops_qs = shops_qs.filter(location_id__in=ids)
 
     if category_id:
-        shops_qs = shops_qs.filter(products__category_id=category_id).distinct()
+        category = Category.objects.filter(id=category_id).first()
+        if category:
+            cat_ids = get_category_descendant_ids(category)
+            shops_qs = shops_qs.filter(products__category_id__in=cat_ids).distinct()
 
-    # Ключ в сессии — свой для каждого фильтра, чтобы при смене региона рандом пересчитывался
-    session_key = f"shops_order_{location_id or 'all'}_{category_id or 'all'}"
+    if query:
+        shops_qs = shops_qs.filter(products__name__icontains=query, products__is_active=True).distinct()
+
+    # session_key теперь учитывает и запрос
+    session_key = f"shops_order_{location_id or 'all'}_{category_id or 'all'}_{query or 'none'}"
+
+    # ... остальной код без изменений, только session_key заменить на этот
 
     if session_key not in request.session:
         # Первый заход с этим фильтром — генерируем и запоминаем порядок
@@ -63,45 +81,9 @@ def home(request):
         'page_obj': page_obj,
         'selected_location': selected_location,
         'location_id': location_id or '',
+        'category_id': category_id or '',
+        'query': query,
 })
 
 
-    # shops_dict = Shop.objects.in_bulk(page_obj.object_list)
-    # shops = [shops_dict[shop_id] for shop_id in page_obj.object_list if shop_id in shops_dict]
-
-    # return render(request, 'pages/home.html', {
-    #     'shops': shops,
-    #     'page_obj': page_obj,
-    #     'selected_location': selected_location,
-    #     'location_id': location_id or '',
-    # })
-
-
-# from django.shortcuts import render
-# from shops.models import Shop
-# from locations.models import Location
-
-
-# def get_descendant_ids(location):
-#     ids = [location.id]
-#     for child in location.children.all():
-#         ids.append(child.id)
-#         ids += list(child.children.values_list('id', flat=True))
-#     return ids
-
-
-# def home(request):
-#     location_id = request.GET.get('location')
-#     shops = Shop.objects.filter(is_active=True)
-
-#     selected_location = None
-#     if location_id:
-#         selected_location = Location.objects.filter(id=location_id).first()
-#         if selected_location:
-#             ids = get_descendant_ids(selected_location)
-#             shops = shops.filter(location_id__in=ids)
-
-#     return render(request, 'pages/home.html', {
-#         'shops': shops,
-#         'selected_location': selected_location,
-#     })
+    

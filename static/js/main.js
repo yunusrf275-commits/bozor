@@ -97,10 +97,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const page = container.dataset.nextPage;
         const location = container.dataset.location;
         const category = container.dataset.category || '';
+        const query = container.dataset.query || '';
+        fetch(`/?page=${page}&location=${location}&category=${category}&q=${encodeURIComponent(query)}&ajax=1`)
+        
 
-        fetch(`/?page=${page}&location=${location}&ajax=1`, {
-            
-        })
+      
             .then(response => {
                 if (response.redirected || !response.ok) {
                     trigger.remove();

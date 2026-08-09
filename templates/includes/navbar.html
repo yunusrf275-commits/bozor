@@ -23,9 +23,11 @@
         </div>
 
             <!-- Заглушка: поиск -->
-            <form class="d-flex flex-grow-1 mx-lg-3 my-2 my-lg-0">
-                <input class="form-control" type="search" placeholder="Поиск магазинов и товаров (заглушка)" disabled>
-            </form>
+           <form class="d-flex flex-grow-1 mx-lg-3 my-2 my-lg-0" method="get" action="{% url 'pages:home' %}">
+                <input class="form-control" type="search" name="q" placeholder="Поиск товаров..." value="{{ query|default:'' }}">
+                {% if location_id %}<input type="hidden" name="location" value="{{ location_id }}">{% endif %}
+                <button type="submit" class="btn btn-outline-primary ms-2">🔍</button>
+           </form>
 
             <!-- Заглушка: вход/корзина -->
             <div class="d-flex align-items-center gap-3">
