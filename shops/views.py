@@ -87,3 +87,20 @@ def product_delete(request, shop_id, product_id):
         return redirect('shops:dashboard', shop_id=shop.id)
 
     return render(request, 'shops/product_confirm_delete.html', {'shop': shop, 'product': product})
+
+from orders.models import Order
+
+
+@login_required
+def order_update_status(request, shop_id, order_id):
+    shop = get_object_or_404(Shop, id=shop_id, owner=request.user)
+    order = get_object_or_404(Order, id=order_id, shop=shop)
+
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        valid_statuses = dict(Order.STATUS_CHOICES).keys()
+        if new_status in valid_statuses:
+            order.status = new_status
+            order.save()
+
+    return redirect('shops:dashboard', shop_id=shop.id)
