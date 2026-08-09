@@ -4,11 +4,20 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from cart.cart import Cart
+from shops.models import Shop
 from .models import Order, OrderItem
+
+from django.contrib.auth.decorators import login_required
 
 
 def checkout(request):
     cart = Cart(request)
+#     order = Order.objects.create(
+#     shop=shop,
+#     customer=request.user if request.user.is_authenticated else None,
+#     customer_phone=phone,
+#     customer_name=name,
+# )
 
     if len(cart) == 0:
         return redirect('cart:detail')
@@ -48,3 +57,8 @@ def checkout(request):
         return render(request, 'orders/success.html', {'orders': created_orders})
 
     return render(request, 'orders/checkout.html', {'cart': cart})
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(customer=request.user).prefetch_related('items__product', 'shop')
+    return render(request, 'orders/my_orders.html', {'orders': orders})

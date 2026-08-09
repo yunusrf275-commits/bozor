@@ -4,6 +4,7 @@
 from django.db import models
 from shops.models import Shop
 from products.models import Product
+from django.conf import settings
 
 
 class Order(models.Model):
@@ -24,6 +25,14 @@ class Order(models.Model):
         on_delete=models.PROTECT,
         related_name='orders',
         verbose_name="Магазин",
+    )
+    customer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='orders',
+        verbose_name="Покупатель",
     )
     customer_phone = models.CharField(max_length=20, verbose_name="Телефон покупателя")
     customer_name = models.CharField(max_length=100, blank=True, verbose_name="Имя покупателя")
@@ -69,3 +78,5 @@ class OrderItem(models.Model):
     @property
     def total_price(self):
         return self.price_at_order * self.quantity
+
+    

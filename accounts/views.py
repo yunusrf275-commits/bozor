@@ -30,7 +30,9 @@ def seller_dashboard(request):
     if request.user.role != User.ROLE_SHOP_OWNER:
         return redirect('accounts:seller_login')
 
-    my_shops = Shop.objects.filter(owner=request.user)
+    owned_shops = Shop.objects.filter(owner=request.user)
+    staff_shops = Shop.objects.filter(staff__user=request.user)
+    my_shops = (owned_shops | staff_shops).distinct()
 
     if my_shops.count() == 1:
         return redirect('shops:dashboard', shop_id=my_shops.first().id)

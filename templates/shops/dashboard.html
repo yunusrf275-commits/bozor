@@ -8,7 +8,14 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Товары</h3>
-        <a href="{% url 'shops:product_add' shop.id %}" class="btn btn-primary">+ Добавить товар</a>
+        {% if can_manage_products %}
+            <a href="{% url 'shops:product_add' shop.id %}" class="btn btn-primary">+ Добавить товар</a>
+
+        {% endif %}
+
+        {% if access_role == 'owner' %}
+            <a href="{% url 'shops:staff_list' shop.id %}" class="btn btn-outline-secondary mb-3">Сотрудники</a>
+        {% endif %}
     </div>
 
     <table class="table table-hover align-middle">
@@ -41,8 +48,10 @@
                     <td>{{ product.stock_quantity }}</td>
                     <td>{% if product.is_active %}✅{% else %}❌{% endif %}</td>
                     <td>
-                        <a href="{% url 'shops:product_edit' shop.id product.id %}" class="btn btn-sm btn-outline-secondary">Изменить</a>
-                        <a href="{% url 'shops:product_delete' shop.id product.id %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                        {% if can_manage_products %}
+                            <a href="{% url 'shops:product_edit' shop.id product.id %}" class="btn btn-sm btn-outline-secondary">Изменить</a>
+                            <a href="{% url 'shops:product_delete' shop.id product.id %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% empty %}
@@ -83,16 +92,20 @@
                         {% widthratio 1 1 1 %}{{ items|length }}
                     {% endwith %}
                 </td> {% endcomment %}
-                <td>
-                    <form method="post" action="{% url 'shops:order_update_status' shop.id order.id %}" class="d-flex gap-1">
-                        {% csrf_token %}
-                        <select name="status" class="form-select form-select-sm" style="width: auto;">
-                            {% for value, label in order.STATUS_CHOICES %}
-                                <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit" class="btn btn-sm btn-outline-primary">Сохранить</button>
-                    </form>
+               <td>
+                    {% if can_manage_orders %}
+                        <form method="post" action="{% url 'shops:order_update_status' shop.id order.id %}" class="d-flex gap-1">
+                            {% csrf_token %}
+                            <select name="status" class="form-select form-select-sm" style="width: auto;">
+                                {% for value, label in order.STATUS_CHOICES %}
+                                    <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Сохранить</button>
+                        </form>
+                    {% else %}
+                        {{ order.get_status_display }}
+                    {% endif %}
                 </td>
                 <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
             </tr>

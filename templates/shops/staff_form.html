@@ -1,0 +1,38 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Добавить сотрудника</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="col-md-6">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Логин</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Имя</label>
+            <input type="text" name="first_name" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Пароль</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Уровень доступа</label>
+            <select name="role" class="form-select" required>
+                {% for value, label in roles %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать сотрудника</button>
+    </form>
+{% endblock %}

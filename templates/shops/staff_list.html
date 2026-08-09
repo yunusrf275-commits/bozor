@@ -1,0 +1,34 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Сотрудники — {{ shop.name }}</h1>
+
+    <a href="{% url 'shops:staff_add' shop.id %}" class="btn btn-primary mb-3">+ Добавить сотрудника</a>
+
+    <table class="table">
+        <thead>
+            <tr><th>Логин</th><th>Имя</th><th>Роль</th><th></th></tr>
+        </thead>
+        <tbody>
+            {% for staff in staff_members %}
+                <tr>
+                    <td>{{ staff.user.username }}</td>
+                    <td>{{ staff.user.first_name }}</td>
+                    <td>{{ staff.get_role_display }}</td>
+                    <td>
+                        <form method="post" action="{% url 'shops:staff_delete' shop.id staff.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">Пока нет сотрудников.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'shops:dashboard' shop.id %}" class="btn btn-outline-secondary">Назад в кабинет</a>
+{% endblock %}

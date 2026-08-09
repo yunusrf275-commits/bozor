@@ -43,3 +43,43 @@ class Shop(models.Model):
                 counter += 1
             self.slug = slug
         super().save(*args, **kwargs)
+
+class ShopStaff(models.Model):
+    ROLE_MANAGER = 'manager'
+    ROLE_PRODUCT_MANAGER = 'product_manager'
+    ROLE_ORDER_HANDLER = 'order_handler'
+    ROLE_VIEWER = 'viewer'
+
+    ROLE_CHOICES = [
+        (ROLE_MANAGER, 'Управляющий (полный доступ)'),
+        (ROLE_PRODUCT_MANAGER, 'Менеджер товаров'),
+        (ROLE_ORDER_HANDLER, 'Продавец (приём заказов)'),
+        (ROLE_VIEWER, 'Наблюдатель'),
+    ]
+
+    shop = models.ForeignKey(
+        Shop,
+        on_delete=models.CASCADE,
+        related_name='staff',
+        verbose_name="Магазин",
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='shop_staff_roles',
+        verbose_name="Сотрудник",
+    )
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES,
+        default=ROLE_VIEWER,
+        verbose_name="Уровень доступа",
+    )
+
+    class Meta:
+        verbose_name = "Сотрудник магазина"
+        verbose_name_plural = "Сотрудники магазина"
+        unique_together = ('shop', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} — {self.shop.name} ({self.get_role_display()})"
