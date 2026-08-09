@@ -29,20 +29,18 @@
 
             <!-- Заглушка: вход/корзина -->
             <div class="d-flex align-items-center gap-3">
-                {% if user.is_authenticated and user.role == 'customer' %}
-                    <a href="{% url 'orders:my_orders' %}" class="text-decoration-none text-muted">Мои заказы</a>
-                    <span class="text-muted">{{ user.username }}</span>
-                    <a href="{% url 'accounts:customer_logout' %}" class="text-decoration-none">Выйти</a>
-                {% else %}
-                    <a href="{% url 'accounts:customer_login' %}" class="text-decoration-none">Войти</a>
-                {% endif %}
-                <a href="{% url 'cart:detail' %}" class="text-decoration-none">
-                    🛒 Корзина
-                    {% if cart|length > 0 %}
-                        <span class="badge bg-primary rounded-pill">{{ cart|length }}</span>
-                    {% endif %}
-                </a>
-            </div>
+            {% if user.is_authenticated and user.role == 'customer' %}
+                <a href="{% url 'orders:my_orders' %}" class="text-decoration-none text-muted">Мои заказы</a>
+                <span class="text-muted">{{ user.username }}</span>
+                <a href="{% url 'accounts:customer_logout' %}" class="text-decoration-none">Выйти</a>
+            {% else %}
+                <a href="{% url 'accounts:customer_login' %}" class="text-decoration-none">Войти</a>
+            {% endif %}
+            <a href="{% url 'cart:detail' %}" class="text-decoration-none">
+                🛒 Корзина
+                <span id="cartBadge" class="badge bg-primary rounded-pill" {% if cart|length == 0 %}style="display:none;"{% endif %}>{{ cart|length }}</span>
+            </a>
+        </div>
         </div>
     </div>
 </nav>

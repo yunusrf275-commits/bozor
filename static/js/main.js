@@ -185,3 +185,39 @@ if (categoriesList) {
         });
     }
 }
+
+
+
+document.addEventListener('submit', function (e) {
+    const form = e.target.closest('.add-to-cart-form');
+    if (!form) return;
+
+    e.preventDefault();
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Товар добавлен в корзину');
+                const cartBadge = document.getElementById('cartBadge');
+                if (cartBadge) {
+                    cartBadge.textContent = data.cart_count;
+                    cartBadge.style.display = 'inline-block';
+                }
+            }
+        });
+});
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#198754; color:white; padding:12px 20px; border-radius:6px; z-index:9999; box-shadow:0 2px 8px rgba(0,0,0,0.2);';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+}
