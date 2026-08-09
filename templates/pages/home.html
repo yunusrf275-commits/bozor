@@ -1,15 +1,37 @@
 
 
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
-    <h1 class="mb-4">Магазины</h1>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="shopsContainer" data-next-page="2" 
-           data-location="{{ location_id }}" data-category="{{ category_id }}" data-query="{{ query }}">
-        {% include 'pages/_shop_cards.html' %}
+   <div class="d-flex justify-content-between align-items-center mb-4 sticky-top bg-white py-2" style="top: 56px; z-index: 100;">
+        <h1 class="mb-0 h4">{% if view_mode == 'products' %}Товары{% else %}Магазины{% endif %}</h1>
+        <div class="btn-group">
+            <a href="?view=shops&location={{ location_id }}&category={{ category_id }}&q={{ query }}"
+               class="btn btn-outline-primary btn-sm {% if view_mode != 'products' %}active{% endif %}">Магазины</a>
+            <a href="?view=products&location={{ location_id }}&category={{ category_id }}&q={{ query }}"
+               class="btn btn-outline-primary btn-sm {% if view_mode == 'products' %}active{% endif %}">Товары</a>
+        </div>
     </div>
+    {% comment %} <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">{% if view_mode == 'products' %}Товары{% else %}Магазины{% endif %}</h1>
+        <div class="btn-group">
+            <a href="?view=shops&location={{ location_id }}&category={{ category_id }}&q={{ query }}"
+               class="btn btn-outline-primary {% if view_mode != 'products' %}active{% endif %}">Магазины</a>
+            <a href="?view=products&location={{ location_id }}&category={{ category_id }}&q={{ query }}"
+               class="btn btn-outline-primary {% if view_mode == 'products' %}active{% endif %}">Товары</a>
+        </div>
+    </div> {% endcomment %}
+
+    {% if view_mode == 'products' %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="shopsContainer" data-next-page="2" data-location="{{ location_id }}" data-category="{{ category_id }}" data-query="{{ query }}" data-view="products">
+            {% include 'pages/_product_cards.html' %}
+        </div>
+    {% else %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="shopsContainer" data-next-page="2" data-location="{{ location_id }}" data-category="{{ category_id }}" data-query="{{ query }}" data-view="shops">
+            {% include 'pages/_shop_cards.html' %}
+        </div>
+    {% endif %}
 
     {% if page_obj.has_next %}
         <div id="scrollTrigger" class="text-center py-4">

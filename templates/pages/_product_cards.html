@@ -1,0 +1,36 @@
+
+
+{% for product in products %}
+    <div class="col">
+        <div class="card h-100">
+            <a href="{% url 'products:detail' product.slug %}" class="text-decoration-none text-dark">
+                {% with product.images.first as first_image %}
+                    {% if first_image %}
+                        <img src="{{ first_image.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
+                    {% endif %}
+                {% endwith %}
+                <div class="card-body pb-0">
+                    <h6 class="card-title">{{ product.name }}</h6>
+                    <p class="card-text small text-muted">{{ product.shop.name }}</p>
+                    <p class="card-text">
+                        {% if product.discount_percent %}
+                            <span class="text-decoration-line-through text-muted small">{{ product.price }}</span>
+                            <span class="fw-bold text-danger">{{ product.final_price }}</span>
+                        {% else %}
+                            <span class="fw-bold">{{ product.price }}</span>
+                        {% endif %}
+                        сум
+                    </p>
+                </div>
+            </a>
+            <div class="card-body pt-0">
+                <form method="post" action="{% url 'cart:add' product.id %}" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-primary w-100">В корзину</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <p>Товары не найдены.</p>
+{% endfor %}

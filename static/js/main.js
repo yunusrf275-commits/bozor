@@ -98,7 +98,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const location = container.dataset.location;
         const category = container.dataset.category || '';
         const query = container.dataset.query || '';
-        fetch(`/?page=${page}&location=${location}&category=${category}&q=${encodeURIComponent(query)}&ajax=1`)
+        const view = container.dataset.view || 'shops';
+        fetch(`/?page=${page}&location=${location}&category=${category}&q=${encodeURIComponent(query)}&view=${view}&ajax=1`)
+        
         
 
       
