@@ -9,15 +9,8 @@ from .models import Order, OrderItem
 
 from django.contrib.auth.decorators import login_required
 
-
 def checkout(request):
     cart = Cart(request)
-#     order = Order.objects.create(
-#     shop=shop,
-#     customer=request.user if request.user.is_authenticated else None,
-#     customer_phone=phone,
-#     customer_name=name,
-# )
 
     if len(cart) == 0:
         return redirect('cart:detail')
@@ -40,6 +33,7 @@ def checkout(request):
         for shop, items in shops_items.items():
             order = Order.objects.create(
                 shop=shop,
+                customer=request.user if request.user.is_authenticated else None,
                 customer_phone=phone,
                 customer_name=name,
             )
