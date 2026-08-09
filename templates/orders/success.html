@@ -1,0 +1,18 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">✅ Заявка отправлена!</h1>
+    <p>Продавец скоро свяжется с вами по указанному номеру.</p>
+
+    {% for order in orders %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <strong>{{ order.shop.name }}</strong> — заказ #{{ order.id }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <a href="{% url 'pages:home' %}" class="btn btn-outline-primary mt-3">Вернуться на главную</a>
+{% endblock %}

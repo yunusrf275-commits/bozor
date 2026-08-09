@@ -1,0 +1,44 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Оформление заказа</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Ваш заказ</h4>
+            <table class="table">
+                {% for item in cart %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }} шт.</td>
+                        <td>{{ item.total_price }} сум</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <h5>Итого: {{ cart.get_total_price }} сум</h5>
+        </div>
+
+        <div class="col-md-6">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Ваш номер телефона *</label>
+                    <input type="tel" name="phone" class="form-control" placeholder="+998 90 123 45 67" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ваше имя (необязательно)</label>
+                    <input type="text" name="name" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success btn-lg">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

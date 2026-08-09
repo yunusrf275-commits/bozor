@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Shop
 from products.models import Product, ProductImage
 from categories.models import Category
+from orders.models import Order
 
 
 def shop_detail(request, slug):
@@ -13,11 +14,13 @@ def shop_detail(request, slug):
     return render(request, 'shops/detail.html', {'shop': shop, 'products': products})
 
 
+
 @login_required
 def shop_dashboard(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id, owner=request.user)
     products = Product.objects.filter(shop=shop)
-    return render(request, 'shops/dashboard.html', {'shop': shop, 'products': products})
+    orders = Order.objects.filter(shop=shop).prefetch_related('items__product')
+    return render(request, 'shops/dashboard.html', {'shop': shop, 'products': products, 'orders': orders})
 
 
 @login_required

@@ -35,7 +35,7 @@
 
         <h4>Итого: {{ cart.get_total_price }} сум</h4>
 
-        <a href="#" class="btn btn-success btn-lg mt-3">Оформить заказ</a>
+        <a href="{% url 'orders:checkout' %}" class="btn btn-success btn-lg mt-3">Оформить заказ</a>
     {% else %}
         <p>Корзина пуста.</p>
     {% endif %}
