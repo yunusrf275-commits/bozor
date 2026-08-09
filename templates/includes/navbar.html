@@ -35,7 +35,12 @@
                 {% else %}
                     <a href="{% url 'accounts:customer_login' %}" class="text-decoration-none">Войти</a>
                 {% endif %}
-                <a href="#" class="text-decoration-none text-muted">Корзина (заглушка)</a>
+                <a href="{% url 'cart:detail' %}" class="text-decoration-none">
+                    🛒 Корзина
+                    {% if cart|length > 0 %}
+                        <span class="badge bg-primary rounded-pill">{{ cart|length }}</span>
+                    {% endif %}
+                </a>
             </div>
         </div>
     </div>

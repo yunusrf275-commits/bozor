@@ -40,7 +40,10 @@
 
             <p class="text-muted small">В наличии: {{ product.stock_quantity }} шт.</p>
 
-            <button class="btn btn-primary btn-lg">В корзину</button>
+            <form method="post" action="{% url 'cart:add' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg">В корзину</button>
+            </form>
         </div>
     </div>
 {% endblock %}
