@@ -55,6 +55,7 @@ def create_listing(request):
 
 def listing_list(request):
     location_id = request.GET.get('location')
+    category_id = request.GET.get('category')
     page_number = request.GET.get('page', 1)
 
     listings_qs = Listing.objects.filter(status=Listing.STATUS_APPROVED, is_active=True)
@@ -68,6 +69,9 @@ def listing_list(request):
                 ids += list(child.children.values_list('id', flat=True))
             listings_qs = listings_qs.filter(location_id__in=ids)
 
+    if category_id:
+        listings_qs = listings_qs.filter(category_id=category_id)
+
     paginator = Paginator(listings_qs, 20)
     page_obj = paginator.get_page(page_number)
 
@@ -80,6 +84,7 @@ def listing_list(request):
         'listings': page_obj.object_list,
         'page_obj': page_obj,
         'location_id': location_id or '',
+        'category_id': category_id or '',
     })
 
 

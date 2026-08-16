@@ -1,14 +1,20 @@
 
 
-
+// ===== Модалка "Регион" =====
 document.addEventListener('DOMContentLoaded', function () {
     const regionsList = document.getElementById('regionsList');
     const modalBody = document.getElementById('locationModalBody');
     const selectedLabel = document.getElementById('selectedLocationLabel');
     const allBtn = document.getElementById('allUzbekistanBtn');
 
-   
-    
+    if (!regionsList) return;
+
+    function selectLocation(id, name) {
+        if (selectedLabel) selectedLabel.textContent = name;
+        const params = new URLSearchParams(window.location.search);
+        if (id) { params.set('location', id); } else { params.delete('location'); }
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+    }
 
     // Клик по области — грузим районы
     regionsList.addEventListener('click', function (e) {
@@ -53,31 +59,24 @@ document.addEventListener('DOMContentLoaded', function () {
         location.reload(); // проще всего — просто перезагрузить модалку в исходное состояние
     }
 
-    function selectLocation(id, name) {
-        selectedLabel.textContent = name;
-        window.location.href = `/?location=${id}`;
+    if (allBtn) {
+        allBtn.addEventListener('click', function () {
+            selectLocation('', 'Весь Узбекистан');
+        });
     }
 
-    allBtn.addEventListener('click', function () {
-        window.location.href = `/`;
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    // ... существующий код ...
-
     const searchInput = document.getElementById('locationSearchInput');
-
-    searchInput.addEventListener('input', function () {
-        const query = this.value.toLowerCase();
-        const items = modalBody.querySelectorAll('.list-group-item');
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(query) ? '' : 'none';
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            modalBody.querySelectorAll('.list-group-item').forEach(item => {
+                item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
+            });
         });
-    });
+    }
 });
 
+// ===== Бесконечная прокрутка (переиспользуется для любой страницы со списком карточек) =====
 document.addEventListener('DOMContentLoaded', function () {
     setupInfiniteScroll('shopsContainer', 'scrollTrigger');
     setupInfiniteScroll('listingsContainer', 'listingsScrollTrigger');
@@ -124,74 +123,81 @@ function setupInfiniteScroll(containerId, triggerId) {
     }
 }
 
-const categoriesList = document.getElementById('categoriesList');
-const categoryModalBody = document.getElementById('categoryModalBody');
-const selectedCategoryLabel = document.getElementById('selectedCategoryLabel');
-const allCategoriesBtn = document.getElementById('allCategoriesBtn');
+// ===== Модалка "Категории" (работает на текущей странице, любая глубина вложенности) =====
+document.addEventListener('DOMContentLoaded', function () {
+    const categoriesList = document.getElementById('categoriesList');
+    const categoryModalBody = document.getElementById('categoryModalBody');
+    const allCategoriesBtn = document.getElementById('allCategoriesBtn');
 
-function loadCategoryLevel(categoryId, categoryName) {
-    fetch(`/categories/get-children/?parent_id=${categoryId}`)
-        .then(response => response.json())
-        .then(children => {
-            if (children.length === 0) {
-                window.location.href = `/?category=${categoryId}`;
-                return;
-            }
-            renderCategoryLevel(categoryId, categoryName, children);
-        });
-}
+    if (!categoriesList) return;
 
-function renderCategoryLevel(categoryId, categoryName, children) {
-    let html = `
-        <input type="text" class="form-control mb-3" id="categorySearchInput" placeholder="Поиск...">
-        <button type="button" class="btn btn-link mb-2 back-category-btn">&larr; Назад</button>
-        <button type="button" class="list-group-item list-group-item-action mb-2 select-category-btn" data-id="${categoryId}">
-            Вся категория "${categoryName}"
-        </button>
-        <div class="list-group">
-    `;
-    children.forEach(c => {
-        html += `<button type="button" class="list-group-item list-group-item-action category-btn" data-id="${c.id}" data-name="${c.name}">${c.name}</button>`;
-    });
-    html += `</div>`;
-
-    categoryModalBody.innerHTML = html;
-    attachCategoryHandlers();
-}
-
-function attachCategoryHandlers() {
-    categoryModalBody.querySelectorAll('.category-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            loadCategoryLevel(this.dataset.id, this.dataset.name);
-        });
-    });
-
-    categoryModalBody.querySelectorAll('.select-category-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            window.location.href = `/?category=${this.dataset.id}`;
-        });
-    });
-
-    const backBtn = categoryModalBody.querySelector('.back-category-btn');
-    if (backBtn) {
-        backBtn.addEventListener('click', function () {
-            location.reload();
-        });
+    function selectCategory(id) {
+        const params = new URLSearchParams(window.location.search);
+        if (id) { params.set('category', id); } else { params.delete('category'); }
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
     }
-}
 
-if (categoriesList) {
+    function loadCategoryLevel(categoryId, categoryName) {
+        fetch(`/categories/get-children/?parent_id=${categoryId}`)
+            .then(response => response.json())
+            .then(children => {
+                if (children.length === 0) {
+                    selectCategory(categoryId);
+                    return;
+                }
+                renderCategoryLevel(categoryId, categoryName, children);
+            });
+    }
+
+    function renderCategoryLevel(categoryId, categoryName, children) {
+        let html = `
+            <input type="text" class="form-control mb-3" id="categorySearchInput" placeholder="Поиск...">
+            <button type="button" class="btn btn-link mb-2 back-category-btn">&larr; Назад</button>
+            <button type="button" class="list-group-item list-group-item-action mb-2 select-category-btn" data-id="${categoryId}">
+                Вся категория "${categoryName}"
+            </button>
+            <div class="list-group">
+        `;
+        children.forEach(c => {
+            html += `<button type="button" class="list-group-item list-group-item-action category-btn" data-id="${c.id}" data-name="${c.name}">${c.name}</button>`;
+        });
+        html += `</div>`;
+
+        categoryModalBody.innerHTML = html;
+        attachCategoryHandlers();
+    }
+
+    function attachCategoryHandlers() {
+        categoryModalBody.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                loadCategoryLevel(this.dataset.id, this.dataset.name);
+            });
+        });
+
+        categoryModalBody.querySelectorAll('.select-category-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                selectCategory(this.dataset.id);
+            });
+        });
+
+        const backBtn = categoryModalBody.querySelector('.back-category-btn');
+        if (backBtn) {
+            backBtn.addEventListener('click', function () {
+                location.reload();
+            });
+        }
+    }
+
     attachCategoryHandlers();
 
     if (allCategoriesBtn) {
         allCategoriesBtn.addEventListener('click', function () {
-            window.location.href = '/';
+            selectCategory('');
         });
     }
-}
+});
 
-
-
+// ===== Добавление в корзину через AJAX =====
 document.addEventListener('submit', function (e) {
     const form = e.target.closest('.add-to-cart-form');
     if (!form) return;
@@ -221,7 +227,7 @@ document.addEventListener('submit', function (e) {
 function showToast(message) {
     const toast = document.createElement('div');
     toast.textContent = message;
-    toast.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#198754; color:white; padding:12px 20px; border-radius:6px; z-index:9999; box-shadow:0 2px 8px rgba(0,0,0,0.2);';
+    toast.className = 'bozor-toast';
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 2000);
 }
