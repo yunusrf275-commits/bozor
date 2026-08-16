@@ -1,12 +1,13 @@
 
 import random
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator
 from categories.models import Category
 from shops.models import Shop
 from locations.models import Location
 
+from .models import Page
 
 def get_descendant_ids(location):
     ids = [location.id]
@@ -140,6 +141,15 @@ def home(request):
         'category_id': category_id or '',
         'query': query,
 })
+
+
+
+def page_detail(request, slug):
+    page = get_object_or_404(Page, slug=slug, is_published=True)
+    return render(request, 'pages/page_detail.html', {'page': page})
+
+
+
 
 
     

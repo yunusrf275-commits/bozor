@@ -1,0 +1,48 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="text-center mb-5">
+        <h1>Продавайте на Bozor</h1>
+        <p class="text-muted">Своя витрина, приём заказов онлайн, статистика продаж — без сложных настроек.</p>
+    </div>
+
+    <div class="row mb-5 text-center">
+        <div class="col-md-4 mb-3">
+            <h5>📦 Своя витрина</h5>
+            <p class="text-muted small">Покупатели находят ваш магазин через поиск, категории и регион.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <h5>📱 Приём заказов онлайн</h5>
+            <p class="text-muted small">Заказы приходят прямо в ваш кабинет — с номером телефона покупателя.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <h5>📊 Статистика</h5>
+            <p class="text-muted small">Отслеживайте продажи и товары в удобном кабинете.</p>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success col-md-6 mx-auto">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="col-md-6 mx-auto">
+        <h4 class="mb-3">Оставить заявку на открытие магазина</h4>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Ваше имя</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Номер телефона</label>
+                <input type="tel" name="phone" class="form-control" placeholder="+998 90 123 45 67" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Отправить заявку</button>
+        </form>
+        <p class="text-muted small mt-3">После отправки мы свяжемся с вами для проверки документов и открытия магазина.</p>
+    </div>
+{% endblock %}

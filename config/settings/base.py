@@ -80,6 +80,7 @@ TEMPLATES = [
                 'categories.context_processors.top_categories',
                 'cart.context_processors.cart',
                 'notifications.context_processors.unread_notifications',
+                'pages.context_processors.footer_pages',
             ],
         },
     },

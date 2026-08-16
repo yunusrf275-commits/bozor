@@ -7,4 +7,5 @@ app_name = 'pages'
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('page/<slug:slug>/', views.page_detail, name='page_detail'),
 ]

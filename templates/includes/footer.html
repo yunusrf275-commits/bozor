@@ -1,0 +1,10 @@
+
+
+<div class="col-md-4 mb-3 mb-md-0">
+    <h6>Компания</h6>
+    <ul class="list-unstyled small">
+        {% for page in footer_pages %}
+            <li><a href="{% url 'pages:page_detail' page.slug %}" class="text-secondary text-decoration-none">{{ page.title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

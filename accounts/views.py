@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from shops.models import Shop
-from .models import User
+from .models import SellerApplication, User
 
 
 
@@ -87,3 +87,16 @@ def customer_login(request):
 def customer_logout(request):
     logout(request)
     return redirect('pages:home')
+
+
+def seller_landing(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+
+        if name and phone:
+            SellerApplication.objects.create(name=name, phone=phone)
+            messages.success(request, 'Заявка отправлена! Мы свяжемся с вами в ближайшее время.')
+            return redirect('accounts:seller_landing')
+
+    return render(request, 'accounts/seller_landing.html')
