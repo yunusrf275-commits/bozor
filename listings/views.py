@@ -86,4 +86,4 @@ def listing_list(request):
 @login_required
 def my_listings(request):
     listings = Listing.objects.filter(user=request.user)
-    return render(request, 'listings/my_listings.html', {'listings': listings})
+    return render(request, 'listings/my_listings.html', {'listings': listings, 'active_tab': 'listings'})

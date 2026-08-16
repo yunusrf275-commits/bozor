@@ -1,16 +1,17 @@
 
 
-{% extends 'base.html' %}
+{% extends 'accounts/account_base.html' %}
 
-{% block content %}
-    <h1 class="mb-4">Мои заказы</h1>
-
+{% block account_content %}
     {% for order in orders %}
         <div class="card mb-3">
             <div class="card-body">
-                <h5>{{ order.shop.name }} — заказ #{{ order.id }}</h5>
-                <p class="text-muted small">{{ order.created_at|date:"d.m.Y H:i" }} — {{ order.get_status_display }}</p>
-                <ul class="list-unstyled mb-0">
+                <div class="d-flex justify-content-between">
+                    <h6 class="mb-1">{{ order.shop.name }} — заказ #{{ order.id }}</h6>
+                    <span class="text-muted small">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+                </div>
+                <span class="badge bg-primary mb-2">{{ order.get_status_display }}</span>
+                <ul class="list-unstyled mb-2 small text-muted">
                     {% for item in order.items.all %}
                         <li>{{ item.product.name }} x{{ item.quantity }} — {{ item.total_price }} сум</li>
                     {% endfor %}
@@ -19,6 +20,6 @@
             </div>
         </div>
     {% empty %}
-        <p>У вас пока нет заказов.</p>
+        <p class="text-muted">У вас пока нет заказов.</p>
     {% endfor %}
 {% endblock %}

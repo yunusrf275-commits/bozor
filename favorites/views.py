@@ -48,4 +48,5 @@ def my_favorites(request):
     return render(request, 'favorites/my_favorites.html', {
         'favorite_shops': favorite_shops,
         'favorite_products': favorite_products,
+        'active_tab': 'favorites',
     })

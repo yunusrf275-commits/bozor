@@ -92,7 +92,7 @@ def order_success(request):
 @login_required
 def my_orders(request):
     orders = Order.objects.filter(customer=request.user).prefetch_related('items__product', 'shop')
-    return render(request, 'orders/my_orders.html', {'orders': orders})
+    return render(request, 'orders/my_orders.html', {'orders': orders, 'active_tab': 'orders'})
 
 
 
