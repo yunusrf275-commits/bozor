@@ -1,0 +1,29 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Мои объявления</h1>
+    <a href="{% url 'listings:create' %}" class="btn btn-primary mb-4">+ Подать объявление</a>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+        {% for listing in listings %}
+            <div class="col">
+                <div class="card h-100">
+                    {% with listing.images.first as first_image %}
+                        {% if first_image %}
+                            <img src="{{ first_image.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
+                        {% endif %}
+                    {% endwith %}
+                    <div class="card-body">
+                        <h6 class="card-title">{{ listing.title }}</h6>
+                        <p class="card-text fw-bold">{{ listing.price }} сум</p>
+                        <p class="card-text text-muted small">{{ listing.get_status_display }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>У вас пока нет объявлений.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

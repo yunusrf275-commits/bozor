@@ -18,6 +18,7 @@ urlpatterns = [
     path('favorites/', include('favorites.urls')),
     path('reviews/', include('reviews.urls')),
     path('notifications/', include('notifications.urls')),
+    path('listings/', include('listings.urls')),
 ]
 
 

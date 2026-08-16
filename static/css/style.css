@@ -1,0 +1,247 @@
+
+
+
+/* ===== Bozor — единая система стилей ===== */
+ 
+:root {
+  --bozor-primary: #0f766e;
+  --bozor-primary-dark: #0b5b54;
+  --bozor-primary-light: #e6f4f2;
+  --bozor-accent: #f97316;
+  --bozor-accent-dark: #ea660a;
+  --bozor-text: #1f2937;
+  --bozor-text-muted: #6b7280;
+  --bozor-border: #e5e7eb;
+  --bozor-bg: #f9fafb;
+  --bozor-radius: 12px;
+  --bozor-radius-sm: 8px;
+  --bozor-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --bozor-shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+ 
+body {
+  background-color: var(--bozor-bg);
+  color: var(--bozor-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+ 
+/* ===== Навбар ===== */
+.navbar {
+  border-bottom: 1px solid var(--bozor-border);
+}
+ 
+.navbar-brand {
+  color: var(--bozor-primary) !important;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+}
+ 
+/* ===== Кнопки ===== */
+.btn-primary {
+  background-color: var(--bozor-primary);
+  border-color: var(--bozor-primary);
+  border-radius: var(--bozor-radius-sm);
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--bozor-primary-dark);
+  border-color: var(--bozor-primary-dark);
+}
+ 
+.btn-outline-primary {
+  color: var(--bozor-primary);
+  border-color: var(--bozor-primary);
+  border-radius: var(--bozor-radius-sm);
+}
+.btn-outline-primary:hover {
+  background-color: var(--bozor-primary);
+  border-color: var(--bozor-primary);
+}
+ 
+.btn-outline-secondary,
+.btn-outline-danger,
+.btn-outline-success {
+  border-radius: var(--bozor-radius-sm);
+}
+ 
+.btn-success {
+  background-color: var(--bozor-primary);
+  border-color: var(--bozor-primary);
+}
+.btn-success:hover {
+  background-color: var(--bozor-primary-dark);
+  border-color: var(--bozor-primary-dark);
+}
+ 
+.btn-outline-success {
+  color: var(--bozor-primary);
+  border-color: var(--bozor-primary);
+}
+.btn-outline-success:hover {
+  background-color: var(--bozor-primary);
+  border-color: var(--bozor-primary);
+}
+ 
+/* ===== Карточки ===== */
+.card {
+  border: 1px solid var(--bozor-border);
+  border-radius: var(--bozor-radius);
+  box-shadow: var(--bozor-shadow);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  overflow: hidden;
+}
+.card:hover {
+  box-shadow: var(--bozor-shadow-hover);
+  transform: translateY(-2px);
+}
+.card-img-top {
+  background-color: #f3f4f6;
+}
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--bozor-text);
+}
+.card-text {
+  color: var(--bozor-text-muted);
+}
+ 
+/* ===== Цены и скидки ===== */
+.text-danger.fw-bold {
+  color: var(--bozor-accent) !important;
+}
+.badge.bg-danger {
+  background-color: var(--bozor-accent) !important;
+}
+.badge.bg-primary {
+  background-color: var(--bozor-primary) !important;
+}
+ 
+/* ===== Формы ===== */
+.form-control,
+.form-select {
+  border-radius: var(--bozor-radius-sm);
+  border-color: var(--bozor-border);
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--bozor-primary);
+  box-shadow: 0 0 0 0.2rem rgba(15, 118, 110, 0.15);
+}
+ 
+/* ===== Модалки ===== */
+.modal-content {
+  border-radius: var(--bozor-radius);
+  border: none;
+}
+.list-group-item.list-group-item-action:hover {
+  background-color: var(--bozor-primary-light);
+}
+ 
+/* ===== Ссылки ===== */
+a {
+  color: var(--bozor-primary);
+}
+a:hover {
+  color: var(--bozor-primary-dark);
+}
+ 
+/* ===== Футер ===== */
+footer.bg-dark {
+  background-color: #111827 !important;
+}
+ 
+/* ===== Рейтинг ===== */
+.text-warning {
+  color: #f59e0b !important;
+}
+ 
+/* ===== Мобильная сетка карточек: 2 в ряд вместо 1 ===== */
+@media (max-width: 575.98px) {
+  .row-cols-1 > * {
+    width: 50% !important;
+  }
+  .card-title {
+    font-size: 0.8rem;
+  }
+  .card-text {
+    font-size: 0.8rem;
+  }
+}
+ 
+/* ===== Кнопки навбара на десктопе: без рамки, с мягкой заливкой ===== */
+.navbar-pill {
+  border: none !important;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  transition: background-color 0.15s ease;
+}
+.navbar-pill-location {
+  background-color: var(--bozor-primary-light);
+  color: var(--bozor-primary-dark);
+}
+.navbar-pill-location:hover {
+  background-color: #d3ece8;
+  color: var(--bozor-primary-dark);
+}
+.navbar-pill-category {
+  background-color: #fff1e6;
+  color: var(--bozor-accent-dark);
+}
+.navbar-pill-category:hover {
+  background-color: #ffe4cc;
+  color: var(--bozor-accent-dark);
+}
+.navbar-pill-listings {
+  background-color: #eef2ff;
+  color: #4338ca;
+}
+.navbar-pill-listings:hover {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+.navbar-pill-seller {
+  background-color: var(--bozor-primary);
+  color: white;
+}
+.navbar-pill-seller:hover {
+  background-color: var(--bozor-primary-dark);
+  color: white;
+}
+ 
+/* ===== Гамбургер-кнопка рядом с поиском (мобильный/планшет) ===== */
+.hamburger-btn {
+  border: none;
+  background: var(--bozor-primary-light);
+  color: var(--bozor-primary-dark);
+  border-radius: var(--bozor-radius-sm);
+  width: 36px;
+  height: 32px;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+ 
+/* ===== Компактная верхняя строка навбара на мобильном ===== */
+@media (max-width: 991.98px) {
+  .navbar-brand {
+    font-size: 1.15rem;
+  }
+  .navbar.py-1 {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+  }
+}
+ 
+/* ===== Тосты (уведомление о добавлении в корзину) ===== */
+.bozor-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--bozor-primary);
+  color: white;
+  padding: 12px 20px;
+  border-radius: var(--bozor-radius-sm);
+  z-index: 9999;
+  box-shadow: var(--bozor-shadow-hover);
+}
