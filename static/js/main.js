@@ -225,3 +225,35 @@ function showToast(message) {
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 2000);
 }
+
+// ===== Каскадный выбор региона в форме подачи объявления =====
+document.addEventListener('DOMContentLoaded', function () {
+    const regionSelect = document.getElementById('regionSelect');
+    const districtSelect = document.getElementById('districtSelect');
+
+    if (!regionSelect || !districtSelect) return;
+
+    regionSelect.addEventListener('change', function () {
+        const regionId = this.value;
+        districtSelect.innerHTML = '<option value="">Загрузка...</option>';
+        districtSelect.disabled = true;
+
+        if (!regionId) {
+            districtSelect.innerHTML = '<option value="">Сначала выберите область</option>';
+            return;
+        }
+
+        fetch(`/locations/get-children/?parent_id=${regionId}`)
+            .then(response => response.json())
+            .then(districts => {
+                districtSelect.innerHTML = '<option value="">Выберите район</option>';
+                districts.forEach(d => {
+                    const option = document.createElement('option');
+                    option.value = d.id;
+                    option.textContent = d.name;
+                    districtSelect.appendChild(option);
+                });
+                districtSelect.disabled = false;
+            });
+    });
+});
