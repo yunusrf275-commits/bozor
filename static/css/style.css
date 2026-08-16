@@ -266,3 +266,18 @@ footer a.text-secondary:hover {
   background-color: var(--bozor-primary);
   color: white;
 }
+
+/* ===== Кнопка входа на странице "Для продавцов" ===== */
+.seller-login-btn {
+  border: none;
+  background-color: var(--bozor-primary-light);
+  color: var(--bozor-primary-dark);
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 0.5rem 1.2rem;
+  transition: background-color 0.15s ease;
+}
+.seller-login-btn:hover {
+  background-color: var(--bozor-primary);
+  color: white;
+}
