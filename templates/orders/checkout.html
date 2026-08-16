@@ -37,7 +37,24 @@
                     <label class="form-label">Ваше имя (необязательно)</label>
                     <input type="text" name="name" class="form-control">
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Способ получения</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="delivery_method" value="pickup" id="deliveryPickup" checked onchange="document.getElementById('addressField').style.display='none'">
+                        <label class="form-check-label" for="deliveryPickup">Самовывоз из магазина</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="delivery_method" value="delivery" id="deliveryDelivery" onchange="document.getElementById('addressField').style.display='block'">
+                        <label class="form-check-label" for="deliveryDelivery">Доставка</label>
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-success btn-lg">Отправить заявку</button>
+
+
+                <div class="mb-3" id="addressField" style="display: none;">
+                    <label class="form-label">Адрес доставки</label>
+                    <input type="text" name="delivery_address" class="form-control" placeholder="Улица, дом, квартира">
+                </div>
             </form>
         </div>
     </div>

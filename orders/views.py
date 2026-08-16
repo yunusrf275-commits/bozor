@@ -22,10 +22,24 @@ def checkout(request):
     if request.method == 'POST':
         phone = request.POST.get('phone')
         name = request.POST.get('name', '')
+        delivery_method = request.POST.get('delivery_method', 'pickup')
+        delivery_address = request.POST.get('delivery_address', '')
 
         if not phone:
             messages.error(request, 'Укажите номер телефона.')
             return render(request, 'orders/checkout.html', {'cart': cart})
+
+        if delivery_method == 'delivery' and not delivery_address:
+            messages.error(request, 'Укажите адрес доставки.')
+            return render(request, 'orders/checkout.html', {'cart': cart})
+
+    # if request.method == 'POST':
+    #     phone = request.POST.get('phone')
+    #     name = request.POST.get('name', '')
+
+    #     if not phone:
+    #         messages.error(request, 'Укажите номер телефона.')
+    #         return render(request, 'orders/checkout.html', {'cart': cart})
 
         shops_items = {}
         for item in cart:
@@ -39,6 +53,8 @@ def checkout(request):
                 customer=request.user if request.user.is_authenticated else None,
                 customer_phone=phone,
                 customer_name=name,
+                delivery_method=delivery_method,
+                delivery_address=delivery_address,
             )
 
             for item in items:

@@ -20,6 +20,15 @@ class Order(models.Model):
         (STATUS_CANCELLED, 'Отменена'),
     ]
 
+
+    DELIVERY_PICKUP = 'pickup'
+    DELIVERY_DELIVERY = 'delivery'
+
+    DELIVERY_CHOICES = [
+            (DELIVERY_PICKUP, 'Самовывоз'),
+            (DELIVERY_DELIVERY, 'Доставка'),
+        ]
+
     shop = models.ForeignKey(
         Shop,
         on_delete=models.PROTECT,
@@ -43,6 +52,14 @@ class Order(models.Model):
         verbose_name="Статус",
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    delivery_method = models.CharField(
+        max_length=20,
+        choices=DELIVERY_CHOICES,
+        default=DELIVERY_PICKUP,
+        verbose_name="Способ получения",
+    )
+    delivery_address = models.CharField(max_length=255, blank=True, verbose_name="Адрес доставки")
 
     class Meta:
         verbose_name = "Заказ"

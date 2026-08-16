@@ -75,46 +75,52 @@
             <th>Сумма</th>
             <th>Статус</th>
             <th>Дата</th>
+            <th>Получение</th>
         </tr>
     </thead>
     <tbody>
         {% for order in orders %}
-            <tr>
+        <tr>
                 <td>#{{ order.id }}</td>
                 <td>
                     {% for item in order.items.all %}
-                        {{ item.product.name }} x{{ item.quantity }}<br>
+                    {{ item.product.name }} x{{ item.quantity }}<br>
                     {% endfor %}
                 </td>
                 <td>{{ order.customer_phone }}</td>
                 <td>{{ order.customer_name|default:"—" }}</td>
-
+                
                 <td>{{ order.total_price }} сум</td>
                 {% comment %} <td>
                     {% with order.items.all as items %}
-                        {% widthratio 1 1 1 %}{{ items|length }}
+                    {% widthratio 1 1 1 %}{{ items|length }}
                     {% endwith %}
                 </td> {% endcomment %}
-               <td>
+                <td>
                     {% if can_manage_orders %}
-                        <form method="post" action="{% url 'shops:order_update_status' shop.id order.id %}" class="d-flex gap-1">
-                            {% csrf_token %}
-                            <select name="status" class="form-select form-select-sm" style="width: auto;">
-                                {% for value, label in order.STATUS_CHOICES %}
-                                    <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-outline-primary">Сохранить</button>
-                        </form>
+                    <form method="post" action="{% url 'shops:order_update_status' shop.id order.id %}" class="d-flex gap-1">
+                        {% csrf_token %}
+                        <select name="status" class="form-select form-select-sm" style="width: auto;">
+                            {% for value, label in order.STATUS_CHOICES %}
+                            <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-outline-primary">Сохранить</button>
+                    </form>
                     {% else %}
-                        {{ order.get_status_display }}
+                    {{ order.get_status_display }}
                     {% endif %}
                 </td>
                 <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    {{ order.get_delivery_method_display }}
+                    {% if order.delivery_address %}<br><span class="text-muted small">{{ order.delivery_address }}</span>{% endif %}
+                </td>
             </tr>
         {% empty %}
             <tr><td colspan="7">Пока нет заказов.</td></tr>
         {% endfor %}
+
     </tbody>
 </table>
 {% endblock %}
