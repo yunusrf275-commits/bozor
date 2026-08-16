@@ -1,0 +1,20 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Уведомления</h1>
+
+    {% for notification in notifications %}
+        <div class="border-bottom py-2">
+            {% if notification.link %}
+                <a href="{{ notification.link }}" class="text-decoration-none">{{ notification.text }}</a>
+            {% else %}
+                {{ notification.text }}
+            {% endif %}
+            <div class="text-muted small">{{ notification.created_at|date:"d.m.Y H:i" }}</div>
+        </div>
+    {% empty %}
+        <p>Уведомлений пока нет.</p>
+    {% endfor %}
+{% endblock %}

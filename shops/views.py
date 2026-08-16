@@ -12,6 +12,8 @@ from orders.models import Order
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
+from notifications.models import Notification
+
 
 def shop_detail(request, slug):
     shop = get_object_or_404(Shop, slug=slug, is_active=True)
@@ -158,6 +160,13 @@ def order_update_status(request, shop_id, order_id):
         if new_status in valid_statuses:
             order.status = new_status
             order.save()
+
+            if order.customer:
+                Notification.objects.create(
+                    user=order.customer,
+                    text=f"Статус вашего заказа #{order.id} изменён: {order.get_status_display()}",
+                    link=f"/orders/my/",
+                )
 
     return redirect('shops:dashboard', shop_id=shop.id)
 

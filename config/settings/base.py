@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'orders',
     'favorites',
     'reviews',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,7 @@ TEMPLATES = [
                 'locations.context_processors.regions',
                 'categories.context_processors.top_categories',
                 'cart.context_processors.cart',
+                'notifications.context_processors.unread_notifications',
             ],
         },
     },

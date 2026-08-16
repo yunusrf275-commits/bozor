@@ -48,6 +48,15 @@
                 🛒 Корзина
                 <span id="cartBadge" class="badge bg-primary rounded-pill" {% if cart|length == 0 %}style="display:none;"{% endif %}>{{ cart|length }}</span>
             </a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'notifications:list' %}" class="text-decoration-none position-relative">
+                    🔔
+                    {% if unread_notifications_count > 0 %}
+                        <span class="badge bg-danger rounded-pill">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                </a>
+            {% endif %}
         </div>
         </div>
     </div>

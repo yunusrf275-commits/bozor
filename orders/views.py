@@ -9,6 +9,8 @@ from .models import Order, OrderItem
 
 from django.contrib.auth.decorators import login_required
 
+from notifications.models import Notification
+
 def checkout(request):
     cart = Cart(request)
 
@@ -23,13 +25,12 @@ def checkout(request):
             messages.error(request, 'Укажите номер телефона.')
             return render(request, 'orders/checkout.html', {'cart': cart})
 
-        # Разбиваем корзину по магазинам — один заказ на магазин
         shops_items = {}
         for item in cart:
             shop = item['product'].shop
             shops_items.setdefault(shop, []).append(item)
 
-        created_orders = []
+        created_order_ids = []
         for shop, items in shops_items.items():
             order = Order.objects.create(
                 shop=shop,
@@ -37,6 +38,7 @@ def checkout(request):
                 customer_phone=phone,
                 customer_name=name,
             )
+
             for item in items:
                 OrderItem.objects.create(
                     order=order,
@@ -44,13 +46,30 @@ def checkout(request):
                     quantity=item['quantity'],
                     price_at_order=item['product'].final_price,
                 )
-            created_orders.append(order)
+
+            recipients = [shop.owner] if shop.owner else []
+            recipients += [staff.user for staff in shop.staff.all()]
+            for recipient in set(recipients):
+                Notification.objects.create(
+                    user=recipient,
+                    text=f"Новый заказ #{order.id} на сумму {order.total_price} сум",
+                    link=f"/shops/{shop.id}/dashboard/",
+                )
+
+            created_order_ids.append(order.id)
 
         cart.clear()
+        request.session['last_order_ids'] = created_order_ids
 
-        return render(request, 'orders/success.html', {'orders': created_orders})
+        return redirect('orders:success')
 
     return render(request, 'orders/checkout.html', {'cart': cart})
+
+
+def order_success(request):
+    order_ids = request.session.get('last_order_ids', [])
+    orders = Order.objects.filter(id__in=order_ids)
+    return render(request, 'orders/success.html', {'orders': orders})
 
 @login_required
 def my_orders(request):
