@@ -23,40 +23,93 @@
 
     <h3 class="mb-3">Товары</h3>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-        {% for product in products %}
-            <div class="col">
-                <a href="{% url 'products:detail' product.slug %}" class="text-decoration-none text-dark">
-                    <div class="card h-100">
-                        {% with product.images.first as first_image %}
-                            {% if first_image %}
-                                <img src="{{ first_image.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
-                            {% endif %}
-                        {% endwith %}
-                        <div class="card-body">
-                            <h6 class="card-title">{{ product.name }}</h6>
-                            <p class="card-text">
-                                {% if product.discount_percent %}
-                                    <span class="text-decoration-line-through text-muted small">{{ product.price }}</span>
-                                    <span class="fw-bold text-danger">{{ product.final_price }}</span>
-                                {% else %}
-                                    <span class="fw-bold">{{ product.price }}</span>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+            {% for product in products %}
+                <div class="col">
+                    <a href="{% url 'products:detail' product.slug %}" class="text-decoration-none text-dark">
+                        <div class="card h-100">
+                            {% with product.images.first as first_image %}
+                                {% if first_image %}
+                                    <img src="{{ first_image.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
                                 {% endif %}
-                                сум
-                            </p>
+                            {% endwith %}
+                            <div class="card-body">
+                                <h6 class="card-title">{{ product.name }}</h6>
+                                <p class="card-text">
+                                    {% if product.discount_percent %}
+                                        <span class="text-decoration-line-through text-muted small">{{ product.price }}</span>
+                                        <span class="fw-bold text-danger">{{ product.final_price }}</span>
+                                    {% else %}
+                                        <span class="fw-bold">{{ product.price }}</span>
+                                    {% endif %}
+                                    сум
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
 
-                <div class="card-body pt-0">
-                    <form method="post" action="{% url 'cart:add' product.id %}" class="add-to-cart-form">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-primary w-100">В корзину</button>
-                    </form>
+                    <div class="card-body pt-0">
+                        <form method="post" action="{% url 'cart:add' product.id %}" class="add-to-cart-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary w-100">В корзину</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        {% empty %}
-            <p>У этого магазина пока нет товаров.</p>
+            {% empty %}
+                <p>У этого магазина пока нет товаров.</p>
+            {% endfor %}
+        </div>
+
+        <hr class="my-5">
+
+    <h3 class="mb-3">
+        Отзывы
+        {% if shop.average_rating %}
+            <span class="text-warning">{{ shop.average_rating }} ★</span>
+            <span class="text-muted small">({{ shop.reviews_count }})</span>
+        {% endif %}
+    </h3>
+
+    {% if user.is_authenticated %}
+        {% if can_review %}
+            <form method="post" action="{% url 'reviews:add_shop_review' shop.id %}" class="mb-4 col-md-6">
+                {% csrf_token %}
+                <div class="mb-2">
+                    <label class="form-label">Оценка</label>
+                    <select name="rating" class="form-select" required>
+                        <option value="5">5 — отлично</option>
+                        <option value="4">4 — хорошо</option>
+                        <option value="3">3 — нормально</option>
+                        <option value="2">2 — плохо</option>
+                        <option value="1">1 — ужасно</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <textarea name="text" class="form-control" placeholder="Ваш отзыв (необязательно)" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Оставить отзыв</button>
+            </form>
+        {% else %}
+            <p class="text-muted small">Оставить отзыв можно после покупки в этом магазине.</p>
+        {% endif %}
+    {% endif %}
+
+    {% for review in reviews %}
+        <div class="border-bottom pb-2 mb-2">
+            <strong>{{ review.user.username }}</strong>
+            <span class="text-warning">{{ review.rating }} ★</span>
+            <p class="mb-0">{{ review.text }}</p>
+            <span class="text-muted small">{{ review.created_at|date:"d.m.Y" }}</span>
+        </div>
+    {% empty %}
+        <p class="text-muted">Пока нет отзывов.</p>
+    {% endfor %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
         {% endfor %}
-    </div>
+    {% endif %}
+
+
 {% endblock %}

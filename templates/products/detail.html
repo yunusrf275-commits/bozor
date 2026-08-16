@@ -54,4 +54,57 @@
             </form>
         </div>
     </div>
+
+    <hr class="my-5">
+
+    <h3 class="mb-3">
+        Отзывы
+        {% if product.average_rating %}
+            <span class="text-warning">{{ product.average_rating }} ★</span>
+            <span class="text-muted small">({{ product.reviews_count }})</span>
+        {% endif %}
+    </h3>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        {% if can_review %}
+            <form method="post" action="{% url 'reviews:add_product_review' product.id %}" class="mb-4 col-md-6">
+                {% csrf_token %}
+                <div class="mb-2">
+                    <label class="form-label">Оценка</label>
+                    <select name="rating" class="form-select" required>
+                        <option value="5">5 — отлично</option>
+                        <option value="4">4 — хорошо</option>
+                        <option value="3">3 — нормально</option>
+                        <option value="2">2 — плохо</option>
+                        <option value="1">1 — ужасно</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <textarea name="text" class="form-control" placeholder="Ваш отзыв (необязательно)" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Оставить отзыв</button>
+            </form>
+        {% else %}
+            <p class="text-muted small">Оставить отзыв можно после покупки этого товара.</p>
+        {% endif %}
+    {% endif %}
+
+    {% for review in reviews %}
+        <div class="border-bottom pb-2 mb-2">
+            <strong>{{ review.user.username }}</strong>
+            <span class="text-warning">{{ review.rating }} ★</span>
+            <p class="mb-0">{{ review.text }}</p>
+            <span class="text-muted small">{{ review.created_at|date:"d.m.Y" }}</span>
+        </div>
+    {% empty %}
+        <p class="text-muted">Пока нет отзывов.</p>
+    {% endfor %}
+
+
 {% endblock %}

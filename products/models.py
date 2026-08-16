@@ -59,6 +59,17 @@ class Product(models.Model):
             return round(self.price * (100 - self.discount_percent) / 100, 2)
         return self.price
 
+    @property
+    def average_rating(self):
+        reviews = self.reviews.all()
+        if not reviews:
+            return None
+        return round(sum(r.rating for r in reviews) / len(reviews), 1)
+
+    @property
+    def reviews_count(self):
+        return self.reviews.count()
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(

@@ -16,15 +16,21 @@ from django.contrib import messages
 def shop_detail(request, slug):
     shop = get_object_or_404(Shop, slug=slug, is_active=True)
     products = Product.objects.filter(shop=shop, is_active=True)
+    reviews = shop.reviews.select_related('user')
 
     favorite_shop_ids = []
+    can_review = False
     if request.user.is_authenticated:
         favorite_shop_ids = list(request.user.favorite_shops.values_list('shop_id', flat=True))
+        from orders.models import OrderItem
+        can_review = OrderItem.objects.filter(order__shop=shop, order__customer=request.user).exists()
 
     return render(request, 'shops/detail.html', {
         'shop': shop,
         'products': products,
         'favorite_shop_ids': favorite_shop_ids,
+        'reviews': reviews,
+        'can_review': can_review,
     })
 
 

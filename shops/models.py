@@ -44,6 +44,17 @@ class Shop(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
+    @property
+    def average_rating(self):
+        reviews = self.reviews.all()
+        if not reviews:
+            return None
+        return round(sum(r.rating for r in reviews) / len(reviews), 1)
+
+    @property
+    def reviews_count(self):
+        return self.reviews.count()
+
 class ShopStaff(models.Model):
     ROLE_MANAGER = 'manager'
     ROLE_PRODUCT_MANAGER = 'product_manager'
@@ -83,3 +94,5 @@ class ShopStaff(models.Model):
 
     def __str__(self):
         return f"{self.user.username} — {self.shop.name} ({self.get_role_display()})"
+
+
