@@ -237,3 +237,20 @@ def staff_delete(request, shop_id, staff_id):
         messages.success(request, 'Сотрудник удалён из магазина.')
 
     return redirect('shops:staff_list', shop_id=shop.id)
+
+@login_required
+def shop_settings(request, shop_id):
+    shop = get_object_or_404(Shop, id=shop_id)
+    access_role = get_shop_access(request.user, shop)
+
+    if access_role != 'owner':
+        return redirect('shops:dashboard', shop_id=shop.id)
+
+    if request.method == 'POST':
+        shop.card_number = request.POST.get('card_number', '')
+        shop.card_holder_name = request.POST.get('card_holder_name', '')
+        shop.save()
+        messages.success(request, 'Реквизиты сохранены.')
+        return redirect('shops:settings', shop_id=shop.id)
+
+    return render(request, 'shops/settings.html', {'shop': shop})

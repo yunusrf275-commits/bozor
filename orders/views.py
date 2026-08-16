@@ -1,15 +1,17 @@
 
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from cart.cart import Cart
 from shops.models import Shop
 from .models import Order, OrderItem
 
-from django.contrib.auth.decorators import login_required
-
 from notifications.models import Notification
+import qrcode
+import io
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 def checkout(request):
     cart = Cart(request)
@@ -75,3 +77,26 @@ def order_success(request):
 def my_orders(request):
     orders = Order.objects.filter(customer=request.user).prefetch_related('items__product', 'shop')
     return render(request, 'orders/my_orders.html', {'orders': orders})
+
+
+
+
+def order_qr_code(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if not order.shop.card_number:
+        return HttpResponse('У магазина не указаны реквизиты для оплаты', status=404)
+
+    qr_text = (
+        f"Оплата заказа #{order.id}\n"
+        f"Карта: {order.shop.card_number}\n"
+        f"Получатель: {order.shop.card_holder_name}\n"
+        f"Сумма: {order.total_price} сум"
+    )
+
+    qr = qrcode.make(qr_text)
+    buffer = io.BytesIO()
+    qr.save(buffer, format='PNG')
+    buffer.seek(0)
+
+    return HttpResponse(buffer.getvalue(), content_type='image/png')

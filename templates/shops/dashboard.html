@@ -15,7 +15,10 @@
 
         {% if access_role == 'owner' %}
             <a href="{% url 'shops:staff_list' shop.id %}" class="btn btn-outline-secondary mb-3">Сотрудники</a>
+            <a href="{% url 'shops:settings' shop.id %}" class="btn btn-outline-secondary mb-3">Настройки оплаты</a>
         {% endif %}
+
+        
     </div>
 
     <table class="table table-hover align-middle">

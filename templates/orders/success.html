@@ -7,12 +7,25 @@
     <p>Продавец скоро свяжется с вами по указанному номеру.</p>
 
     {% for order in orders %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <strong>{{ order.shop.name }}</strong> — заказ #{{ order.id }}
+                <p class="mb-2">Сумма: {{ order.total_price }} сум</p>
+                {% if order.shop.card_number %}
+                    <p class="text-muted small mb-1">Оплатить можно наличными при получении или переводом по QR:</p>
+                    <img src="{% url 'orders:order_qr' order.id %}" width="180" alt="QR для оплаты">
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+    {% comment %} {% for order in orders %}
         <div class="card mb-2">
             <div class="card-body">
                 <strong>{{ order.shop.name }}</strong> — заказ #{{ order.id }}
             </div>
         </div>
-    {% endfor %}
+    {% endfor %} {% endcomment %}
 
     <a href="{% url 'pages:home' %}" class="btn btn-outline-primary mt-3">Вернуться на главную</a>
 {% endblock %}

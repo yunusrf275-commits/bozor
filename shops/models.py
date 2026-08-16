@@ -23,6 +23,11 @@ class Shop(models.Model):
     )
     logo = models.ImageField(upload_to='shops/logos/%Y/%m/', blank=True, null=True)
     is_active = models.BooleanField(default=True, verbose_name="Активен")
+
+    card_number = models.CharField(max_length=20, blank=True, verbose_name="Номер карты для оплаты")
+    card_holder_name = models.CharField(max_length=100, blank=True, verbose_name="Имя владельца карты")
+
+    
     # save() и Meta без изменений — оставляем как есть
 
     class Meta:
@@ -94,5 +99,8 @@ class ShopStaff(models.Model):
 
     def __str__(self):
         return f"{self.user.username} — {self.shop.name} ({self.get_role_display()})"
+
+
+
 
 

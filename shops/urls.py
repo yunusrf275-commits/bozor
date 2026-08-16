@@ -15,5 +15,6 @@ urlpatterns = [
     path('<int:shop_id>/staff/', views.staff_list, name='staff_list'),
     path('<int:shop_id>/staff/add/', views.staff_add, name='staff_add'),
     path('<int:shop_id>/staff/<int:staff_id>/delete/', views.staff_delete, name='staff_delete'),
+    path('<int:shop_id>/settings/', views.shop_settings, name='settings'),
 
 ]

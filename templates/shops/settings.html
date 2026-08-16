@@ -1,0 +1,32 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Настройки оплаты — {{ shop.name }}</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="alert alert-info">
+        <strong>Как это работает:</strong> покупатель сможет оплатить заказ переводом на указанную карту, отсканировав QR-код на странице заказа (с суммой и вашими реквизитами). Оплата наличными при получении остаётся доступна всегда, независимо от этих настроек.
+        <br><br>
+        <strong>Важно:</strong> после сохранения обязательно проверьте сами — оформите тестовый заказ с другой карты (например, попросите знакомого или используйте другую свою карту) и убедитесь, что перевод по QR проходит корректно и деньги приходят на нужный счёт.
+    </div>
+
+    <form method="post" class="col-md-6">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Номер карты</label>
+            <input type="text" name="card_number" class="form-control" value="{{ shop.card_number }}" placeholder="8600 1234 5678 9012">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Имя владельца карты</label>
+            <input type="text" name="card_holder_name" class="form-control" value="{{ shop.card_holder_name }}" placeholder="Как указано на карте">
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+{% endblock %}
