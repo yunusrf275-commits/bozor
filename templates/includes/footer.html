@@ -1,10 +1,28 @@
 
 
-<div class="col-md-4 mb-3 mb-md-0">
-    <h6>Компания</h6>
-    <ul class="list-unstyled small">
-        {% for page in footer_pages %}
-            <li><a href="{% url 'pages:page_detail' page.slug %}" class="text-secondary text-decoration-none">{{ page.title }}</a></li>
-        {% endfor %}
-    </ul>
-</div>
+<footer class="bg-dark text-light py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <h5 class="fw-bold">Bozor</h5>
+                <p class="text-secondary small mb-0">Маркетплейс, объединяющий магазины со всей страны.</p>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <h6>Компания</h6>
+                <ul class="list-unstyled small">
+                    {% for page in footer_pages %}
+                        <li><a href="{% url 'pages:page_detail' page.slug %}" class="text-secondary text-decoration-none">{{ page.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6>Продавцам</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="{% url 'accounts:seller_landing' %}" class="text-secondary text-decoration-none">Как открыть магазин</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="border-secondary">
+        <p class="text-secondary small mb-0">&copy; 2026 Bozor. Все права защищены.</p>
+    </div>
+</footer>

@@ -79,8 +79,13 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    const container = document.getElementById('shopsContainer');
-    const trigger = document.getElementById('scrollTrigger');
+    setupInfiniteScroll('shopsContainer', 'scrollTrigger');
+    setupInfiniteScroll('listingsContainer', 'listingsScrollTrigger');
+});
+
+function setupInfiniteScroll(containerId, triggerId) {
+    const container = document.getElementById(containerId);
+    const trigger = document.getElementById(triggerId);
     if (!container || !trigger) return;
 
     let loading = false;
@@ -95,15 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function loadMore() {
         loading = true;
         const page = container.dataset.nextPage;
-        const location = container.dataset.location;
-        const category = container.dataset.category || '';
-        const query = container.dataset.query || '';
-        const view = container.dataset.view || 'shops';
-        fetch(`/?page=${page}&location=${location}&category=${category}&q=${encodeURIComponent(query)}&view=${view}&ajax=1`)
-        
-        
+        const params = new URLSearchParams(window.location.search);
+        params.set('page', page);
+        params.set('ajax', '1');
 
-      
+        fetch(`${window.location.pathname}?${params.toString()}`)
             .then(response => {
                 if (response.redirected || !response.ok) {
                     trigger.remove();
@@ -121,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loading = false;
             });
     }
-});
+}
 
 const categoriesList = document.getElementById('categoriesList');
 const categoryModalBody = document.getElementById('categoryModalBody');

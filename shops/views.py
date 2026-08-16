@@ -7,12 +7,18 @@ from .models import Shop
 from products.models import Product, ProductImage
 from categories.models import Category
 from .models import Shop, ShopStaff
-from orders.models import Order
+from orders.models import Order, OrderItem
 
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
 from notifications.models import Notification
+
+
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Sum
+ 
 
 
 def shop_detail(request, slug):
@@ -37,26 +43,84 @@ def shop_detail(request, slug):
 
 
 
+
 @login_required
 def shop_dashboard(request, shop_id):
+    """Обзор со статистикой"""
     shop = get_object_or_404(Shop, id=shop_id)
     access_role = get_shop_access(request.user, shop)
+    if access_role is None:
+        return redirect('accounts:seller_login')
 
+    products_qs = Product.objects.filter(shop=shop)
+    orders_qs = Order.objects.filter(shop=shop)
+
+    completed_orders = orders_qs.filter(status=Order.STATUS_COMPLETED)
+    revenue = sum(o.total_price for o in completed_orders)
+    completed_count = completed_orders.count()
+    average_check = round(revenue / completed_count, 2) if completed_count else 0
+
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+    orders_last_30_days = orders_qs.filter(created_at__gte=thirty_days_ago).count()
+
+    top_items = (
+        OrderItem.objects.filter(order__shop=shop)
+        .values('product__name')
+        .annotate(total_qty=Sum('quantity'))
+        .order_by('-total_qty')[:5]
+    )
+
+    recent_orders = orders_qs.order_by('-created_at')[:5]
+
+    return render(request, 'shops/overview.html', {
+        'shop': shop,
+        'access_role': access_role,
+        'active_tab': 'overview',
+        'total_products': products_qs.count(),
+        'active_products': products_qs.filter(is_active=True).count(),
+        'total_orders': orders_qs.count(),
+        'orders_last_30_days': orders_last_30_days,
+        'revenue': revenue,
+        'average_check': average_check,
+        'top_items': top_items,
+        'recent_orders': recent_orders,
+    })
+
+
+@login_required
+def shop_products(request, shop_id):
+    shop = get_object_or_404(Shop, id=shop_id)
+    access_role = get_shop_access(request.user, shop)
     if access_role is None:
         return redirect('accounts:seller_login')
 
     products = Product.objects.filter(shop=shop)
-    orders = Order.objects.filter(shop=shop).prefetch_related('items__product')
-
     can_manage_products = access_role in ('owner', ShopStaff.ROLE_MANAGER, ShopStaff.ROLE_PRODUCT_MANAGER)
+
+    return render(request, 'shops/products.html', {
+        'shop': shop,
+        'access_role': access_role,
+        'active_tab': 'products',
+        'products': products,
+        'can_manage_products': can_manage_products,
+    })
+
+
+@login_required
+def shop_orders(request, shop_id):
+    shop = get_object_or_404(Shop, id=shop_id)
+    access_role = get_shop_access(request.user, shop)
+    if access_role is None:
+        return redirect('accounts:seller_login')
+
+    orders = Order.objects.filter(shop=shop).prefetch_related('items__product')
     can_manage_orders = access_role in ('owner', ShopStaff.ROLE_MANAGER, ShopStaff.ROLE_ORDER_HANDLER)
 
-    return render(request, 'shops/dashboard.html', {
+    return render(request, 'shops/orders.html', {
         'shop': shop,
-        'products': products,
-        'orders': orders,
         'access_role': access_role,
-        'can_manage_products': can_manage_products,
+        'active_tab': 'orders',
+        'orders': orders,
         'can_manage_orders': can_manage_orders,
     })
 

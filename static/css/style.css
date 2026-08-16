@@ -147,8 +147,16 @@ a:hover {
 }
  
 /* ===== Футер ===== */
+/* ===== Футер ===== */
 footer.bg-dark {
-  background-color: #111827 !important;
+  background-color: var(--bozor-primary-dark) !important;
+}
+footer h5,
+footer h6 {
+  color: white;
+}
+footer a.text-secondary:hover {
+  color: white !important;
 }
  
 /* ===== Рейтинг ===== */
@@ -244,4 +252,17 @@ footer.bg-dark {
   border-radius: var(--bozor-radius-sm);
   z-index: 9999;
   box-shadow: var(--bozor-shadow-hover);
+}
+
+/* ===== Навигация внутри кабинета продавца ===== */
+.dashboard-nav .nav-link {
+  color: var(--bozor-text-muted);
+  background-color: var(--bozor-bg);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  padding: 0.4rem 1rem;
+}
+.dashboard-nav .nav-link.active {
+  background-color: var(--bozor-primary);
+  color: white;
 }

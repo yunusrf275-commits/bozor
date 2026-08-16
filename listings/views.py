@@ -7,6 +7,8 @@ from django.contrib import messages
 from categories.models import Category
 from locations.models import Location
 from .models import Listing, ListingImage 
+from django.core.paginator import Paginator
+from django.http import HttpResponse
 
 
 
@@ -50,10 +52,12 @@ def create_listing(request):
     return render(request, 'listings/create.html', {'categories': categories, 'regions': regions})
 
 
+
 def listing_list(request):
     location_id = request.GET.get('location')
+    page_number = request.GET.get('page', 1)
 
-    listings = Listing.objects.filter(status=Listing.STATUS_APPROVED, is_active=True)
+    listings_qs = Listing.objects.filter(status=Listing.STATUS_APPROVED, is_active=True)
 
     if location_id:
         location = Location.objects.filter(id=location_id).first()
@@ -62,9 +66,21 @@ def listing_list(request):
             for child in location.children.all():
                 ids.append(child.id)
                 ids += list(child.children.values_list('id', flat=True))
-            listings = listings.filter(location_id__in=ids)
+            listings_qs = listings_qs.filter(location_id__in=ids)
 
-    return render(request, 'listings/list.html', {'listings': listings})
+    paginator = Paginator(listings_qs, 20)
+    page_obj = paginator.get_page(page_number)
+
+    if request.GET.get('ajax') == '1':
+        if int(page_number) > paginator.num_pages:
+            return HttpResponse('')
+        return render(request, 'listings/_listing_cards.html', {'listings': page_obj.object_list})
+
+    return render(request, 'listings/list.html', {
+        'listings': page_obj.object_list,
+        'page_obj': page_obj,
+        'location_id': location_id or '',
+    })
 
 
 @login_required

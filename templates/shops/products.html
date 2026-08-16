@@ -1,0 +1,50 @@
+
+
+{% extends 'shops/dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Товары</h5>
+    {% if can_manage_products %}
+        <a href="{% url 'shops:product_add' shop.id %}" class="btn btn-primary btn-sm">+ Добавить товар</a>
+    {% endif %}
+</div>
+
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Фото</th><th>Название</th><th>Категория</th><th>Цена</th>
+            <th>Скидка</th><th>Остаток</th><th>Активен</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>
+                    {% with product.images.first as first_image %}
+                        {% if first_image %}
+                            <img src="{{ first_image.image.url }}" width="50" height="50" style="object-fit: cover;">
+                        {% endif %}
+                    {% endwith %}
+                </td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.discount_percent|default:"—" }}{% if product.discount_percent %}%{% endif %}</td>
+                <td>{{ product.stock_quantity }}</td>
+                <td>{% if product.is_active %}✅{% else %}❌{% endif %}</td>
+                <td>
+                    {% if can_manage_products %}
+                        <a href="{% url 'shops:product_edit' shop.id product.id %}" class="btn btn-sm btn-outline-secondary">Изменить</a>
+                        <a href="{% url 'shops:product_delete' shop.id product.id %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="8">Пока нет товаров.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

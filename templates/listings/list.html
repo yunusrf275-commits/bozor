@@ -6,26 +6,13 @@
     <h1 class="mb-4">Объявления</h1>
     <a href="{% url 'listings:create' %}" class="btn btn-primary mb-4">+ Подать объявление</a>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-        {% for listing in listings %}
-            <div class="col">
-                <a href="#" class="text-decoration-none text-dark">
-                    <div class="card h-100">
-                        {% with listing.images.first as first_image %}
-                            {% if first_image %}
-                                <img src="{{ first_image.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
-                            {% endif %}
-                        {% endwith %}
-                        <div class="card-body">
-                            <h6 class="card-title">{{ listing.title }}</h6>
-                            <p class="card-text fw-bold">{{ listing.price }} сум</p>
-                            <p class="card-text text-muted small">{{ listing.location.name }}</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        {% empty %}
-            <p>Объявлений пока нет.</p>
-        {% endfor %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="listingsContainer" data-next-page="2" data-location="{{ location_id }}">
+        {% include 'listings/_listing_cards.html' %}
     </div>
+
+    {% if page_obj.has_next %}
+        <div id="listingsScrollTrigger" class="text-center py-4">
+            <div class="spinner-border text-secondary" role="status"></div>
+        </div>
+    {% endif %}
 {% endblock %}

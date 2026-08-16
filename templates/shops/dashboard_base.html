@@ -1,0 +1,37 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    {% if shop.logo %}
+        <img src="{{ shop.logo.url }}" width="56" height="56" style="object-fit: cover;" class="rounded me-3">
+    {% endif %}
+    <div>
+        <h1 class="h4 mb-0">{{ shop.name }}</h1>
+        <p class="text-muted small mb-0">{{ shop.location.name }}</p>
+    </div>
+</div>
+
+<ul class="nav nav-pills mb-4 gap-2 dashboard-nav">
+    <li class="nav-item">
+        <a class="nav-link {% if active_tab == 'overview' %}active{% endif %}" href="{% url 'shops:dashboard' shop.id %}">📊 Обзор</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_tab == 'products' %}active{% endif %}" href="{% url 'shops:products' shop.id %}">📦 Товары</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_tab == 'orders' %}active{% endif %}" href="{% url 'shops:orders' shop.id %}">🧾 Заказы</a>
+    </li>
+    {% if access_role == 'owner' %}
+        <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'staff' %}active{% endif %}" href="{% url 'shops:staff_list' shop.id %}">👥 Сотрудники</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'settings' %}active{% endif %}" href="{% url 'shops:settings' shop.id %}">⚙️ Настройки</a>
+        </li>
+    {% endif %}
+</ul>
+
+{% block dashboard_content %}{% endblock %}
+{% endblock %}
