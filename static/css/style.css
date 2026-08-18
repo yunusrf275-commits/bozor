@@ -267,6 +267,24 @@ footer a.text-secondary:hover {
   color: white;
 }
 
+/* ===== Иконка + текст в навбаре: ровное выравнивание по центру ===== */
+.navbar-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--bozor-text);
+  text-decoration: none;
+  line-height: 1;
+}
+.navbar-icon-link:hover {
+  color: var(--bozor-primary);
+}
+.navbar-icon-link span:first-child {
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+}
+
 /* ===== Кнопка входа на странице "Для продавцов" ===== */
 .seller-login-btn {
   border: none;
@@ -280,4 +298,43 @@ footer a.text-secondary:hover {
 .seller-login-btn:hover {
   background-color: var(--bozor-primary);
   color: white;
+}
+
+/* ===== Пункты навбара: чистый текст, без фона/рамки ===== */
+.navbar-link {
+  color: var(--bozor-text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 0.4rem 0;
+  transition: color 0.15s ease;
+  border: none;
+  background: none;
+}
+.navbar-link:hover {
+  color: var(--bozor-primary);
+}
+
+/* ===== Верхняя строка навбара: логотип+поиск+гамбургер как единый блок ===== */
+.navbar-top-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+@media (max-width: 991.98px) {
+  .navbar-top-row {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+  .navbar-top-row form.d-lg-none {
+    min-width: 0;
+  }
+  .navbar-top-row form.d-lg-none .form-control {
+    min-width: 0;
+  }
+}
+@media (min-width: 992px) {
+  .navbar-top-row {
+    width: auto;
+  }
 }

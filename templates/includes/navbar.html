@@ -1,64 +1,67 @@
 
 
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'pages:home' %}">Bozor</a>
+       
+        <div class="navbar-top-row">
+            <a class="navbar-brand fw-bold mb-0" href="{% url 'pages:home' %}">Bozor</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <form class="d-flex flex-grow-1 mx-2 d-lg-none" method="get" action="{% url 'pages:home' %}">
+                <input class="form-control form-control-sm" type="search" name="q" placeholder="Поиск..." value="{{ query|default:'' }}">
+                {% if location_id %}<input type="hidden" name="location" value="{{ location_id }}">{% endif %}
+                <button type="submit" class="btn btn-outline-primary btn-sm ms-1"><i class="bi bi-search"></i></button>
+            </form>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <!-- Заглушка: выбор региона -->
-           <div class="mx-lg-3 my-2 my-lg-0">
-              <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#locationModal">
-        📍      <span id="selectedLocationLabel">Весь Узбекистан</span>
-             </button>
-        </div>
-
-        <div class="mx-lg-2 my-2 my-lg-0">
-            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#categoryModal">
-        📂      <span id="selectedCategoryLabel">Категории</span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
             </button>
         </div>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="mx-lg-3 my-2 my-lg-0">
+                <button type="button" class="navbar-link" data-bs-toggle="modal" data-bs-target="#locationModal">
+                    <i class="bi bi-geo-alt"></i> <span id="selectedLocationLabel">Весь Узбекистан</span>
+                </button>
+            </div>
 
-        <a href="{% url 'accounts:seller_landing' %}" class="btn btn-outline-success btn-sm mx-lg-2">Для продавцов</a>
-        <a href="{% url 'listings:list' %}" class="btn btn-outline-secondary btn-sm mx-lg-2">Объявления</a>
+            <div class="mx-lg-3 my-2 my-lg-0">
+                <button type="button" class="navbar-link" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    <i class="bi bi-grid"></i> <span id="selectedCategoryLabel">Категории</span>
+                </button>
+            </div>
 
-        {% comment %} <div class="btn-group mx-lg-2 my-2 my-lg-0">
-            <a href="{% url 'pages:home' %}?view=shops" class="btn btn-outline-secondary btn-sm">Магазины</a>
-            <a href="{% url 'pages:home' %}?view=products" class="btn btn-outline-secondary btn-sm">Товары</a>
-        </div> {% endcomment %}
+            <a href="{% url 'accounts:seller_landing' %}" class="navbar-link mx-3 mx-lg-3 my-2 my-lg-0 d-inline-block">Для продавцов</a>
+            <a href="{% url 'listings:list' %}" class="navbar-link mx-3 mx-lg-3 my-2 my-lg-0 d-inline-block">Объявления</a>
 
-            <!-- Заглушка: поиск -->
-           <form class="d-flex flex-grow-1 mx-lg-3 my-2 my-lg-0" method="get" action="{% url 'pages:home' %}">
+            <!-- Поиск на десктопе (виден только на lg+, на мобильном уже показан выше) -->
+            <form class="d-none d-lg-flex flex-grow-1 my-2 my-lg-0 mx-lg-3" method="get" action="{% url 'pages:home' %}">
                 <input class="form-control" type="search" name="q" placeholder="Поиск товаров..." value="{{ query|default:'' }}">
                 {% if location_id %}<input type="hidden" name="location" value="{{ location_id }}">{% endif %}
-                <button type="submit" class="btn btn-outline-primary ms-2">🔍</button>
-           </form>
+                <button type="submit" class="btn btn-outline-primary ms-2"><i class="bi bi-search"></i></button>
+            </form>
 
-            <!-- Заглушка: вход/корзина -->
             <div class="d-flex align-items-center gap-3">
-            {% if user.is_authenticated and user.role == 'customer' %}
-                <a href="{% url 'orders:my_orders' %}" class="text-decoration-none text-muted">👤 {{ user.username }}</a>
-                <a href="{% url 'accounts:customer_logout' %}" class="text-decoration-none">Выйти</a>
-            {% else %}
-                <a href="{% url 'accounts:customer_login' %}" class="text-decoration-none">Войти</a>
-            {% endif %}
-            <a href="{% url 'cart:detail' %}" class="text-decoration-none">
-                🛒 Корзина
-                <span id="cartBadge" class="badge bg-primary rounded-pill" {% if cart|length == 0 %}style="display:none;"{% endif %}>{{ cart|length }}</span>
-            </a>
-
-            {% if user.is_authenticated %}
-                <a href="{% url 'notifications:list' %}" class="text-decoration-none position-relative">
-                    🔔
-                    {% if unread_notifications_count > 0 %}
-                        <span class="badge bg-danger rounded-pill">{{ unread_notifications_count }}</span>
-                    {% endif %}
+                {% if user.is_authenticated and user.role == 'customer' %}
+                    <a href="{% url 'orders:my_orders' %}" class="navbar-icon-link text-muted">
+                        <i class="bi bi-person-circle"></i><span>{{ user.username }}</span>
+                    </a>
+                    <a href="{% url 'accounts:customer_logout' %}" class="text-decoration-none">Выйти</a>
+                {% else %}
+                    <a href="{% url 'accounts:customer_login' %}" class="text-decoration-none">Войти</a>
+                {% endif %}
+                <a href="{% url 'cart:detail' %}" class="navbar-icon-link">
+                    <i class="bi bi-cart3"></i><span>Корзина</span>
+                    <span id="cartBadge" class="badge bg-primary rounded-pill" {% if cart|length == 0 %}style="display:none;"{% endif %}>{{ cart|length }}</span>
                 </a>
-            {% endif %}
-        </div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'notifications:list' %}" class="navbar-icon-link position-relative">
+                        <i class="bi bi-bell"></i>
+                        {% if unread_notifications_count > 0 %}
+                            <span class="badge bg-danger rounded-pill">{{ unread_notifications_count }}</span>
+                        {% endif %}
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </nav>
@@ -77,14 +80,11 @@
                     Весь Узбекистан
                 </button>
                 <div class="list-group" id="regionsList">
-                    <!-- сюда сервер сразу отрисует 14 областей -->
-                    <div class="list-group" id="regionsList">
-                       {% for region in navbar_regions %}
-                            <button type="button" class="list-group-item list-group-item-action region-btn" data-id="{{ region.id }}" data-name="{{ region.name }}">
-                               {{ region.name }}
-                            </button>
-                        {% endfor %}
-                    </div>
+                    {% for region in navbar_regions %}
+                        <button type="button" class="list-group-item list-group-item-action region-btn" data-id="{{ region.id }}" data-name="{{ region.name }}">
+                            {{ region.name }}
+                        </button>
+                    {% endfor %}
                 </div>
             </div>
         </div>
